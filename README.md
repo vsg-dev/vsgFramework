@@ -1,8 +1,5 @@
 # vsgFramework
-Framework for building VulkanScenGraph related projects together
-
-vsgFramework project collects all the main VulkanSceneGraph related projects together under one repository/directory structure with build support for each component. vsgFramework can be used as a template repository for projects that wish to use it as a base for their own projects.
-
+Framework collects all the main VulkanSceneGraph related projects together under one repository/directory structure with build support for each component. vsgFramework can be used as a template repository for projects that wish to use it as a base for their own projects.
 
 vsgFramework uses CMake's ExternalProject facility vsgFramework automatically clones external projects in the src directory, then configures, builds and installs the external project headers, libraries and executables in local include, lib and bin directories.
 
