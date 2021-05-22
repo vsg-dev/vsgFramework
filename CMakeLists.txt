@@ -88,7 +88,7 @@ OPTION(build_glslang "Build glslang" ON)
 if (${build_glslang})
     set(glslang "glslang")
     ExternalProject_Add(glslang
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
+        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} GIT_PROGRESS ON
         GIT_REPOSITORY "https://github.com/KhronosGroup/glslang.git" GIT_TAG "master"
     )
 endif()
@@ -101,7 +101,7 @@ OPTION(build_VulkanSceneGraph "Build VulkanSceneGraph" ON)
 if (${build_VulkanSceneGraph})
     set(VulkanSceneGraph "VulkanSceneGraph")
     ExternalProject_Add(VulkanSceneGraph
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
+        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} GIT_PROGRESS ON
         GIT_REPOSITORY "https://github.com/vsg-dev/VulkanSceneGraph.git" GIT_TAG "master"
     )
     ExternalProject_Add_StepDependencies(VulkanSceneGraph build ${glslang})
@@ -118,7 +118,6 @@ if (${build_vsgGIS})
     ExternalProject_Add(vsgGIS
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgGIS.git" GIT_TAG "master"
-
     )
     ExternalProject_Add_StepDependencies(vsgGIS build ${VulkanSceneGraph})
 endif()
@@ -132,7 +131,7 @@ OPTION(build_assimp "Build assimp" ON)
 if (${build_assimp})
     set(assimp "assimp")
     ExternalProject_Add(assimp
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
+        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} GIT_PROGRESS ON
         GIT_REPOSITORY "https://github.com/assimp/assimp.git" GIT_TAG "master"
     )
 endif()
@@ -146,10 +145,8 @@ OPTION(build_vsgXchange "Build vsgXchange" ON)
 if (${build_vsgXchange})
     set(vsgGIS "vsgGIS")
     ExternalProject_Add(vsgXchange
-        PREFIX ${COMPONENTS_DIR}
-        GIT_REPOSITORY "https://github.com/vsg-dev/vsgXchange.git"
-        GIT_TAG "master"
-        CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
+        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} GIT_PROGRESS ON
+        GIT_REPOSITORY "https://github.com/vsg-dev/vsgXchange.git" GIT_TAG "master"        
     )
     ExternalProject_Add_StepDependencies(vsgXchange build ${assimp} ${VulkanSceneGraph} ${vsgGIS})
 endif()
@@ -163,10 +160,8 @@ OPTION(build_vsgImGui "Build vsgImGui" ON)
 if (${build_vsgImGui})
     set(vsgGIS "vsgImGui")
     ExternalProject_Add(vsgImGui
-        PREFIX ${COMPONENTS_DIR}
-        GIT_REPOSITORY "https://github.com/vsg-dev/vsgImGui.git"
-        GIT_TAG "master"
-        CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
+        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} GIT_PROGRESS ON
+        GIT_REPOSITORY "https://github.com/vsg-dev/vsgImGui.git" GIT_TAG "master"
     )
     ExternalProject_Add_StepDependencies(vsgImGui build ${VulkanSceneGraph} ${vsgXchange})
 endif()
@@ -180,10 +175,8 @@ OPTION(build_vsgExamples "Build vsgExamples" ON)
 if (${build_vsgExamples})
     set(vsgExamples "vsgExamples")
     ExternalProject_Add(vsgExamples
-        PREFIX ${COMPONENTS_DIR}
-        GIT_REPOSITORY "https://github.com/vsg-dev/vsgExamples.git"
-        GIT_TAG "master"
-        CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
+        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} GIT_PROGRESS ON
+        GIT_REPOSITORY "https://github.com/vsg-dev/vsgExamples.git" GIT_TAG "master"
     )
     ExternalProject_Add_StepDependencies(vsgExamples build ${VulkanSceneGraph} ${vsgXchange} ${vsgImGui})
 endif()
