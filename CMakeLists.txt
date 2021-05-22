@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.14)
 
 project(vsgFramework)
 
-include(ExternalProject)
+include(FetchContent)
 
 set(DOWNLOADS_DIR ${PROJECT_BINARY_DIR}/downloads)
 set(COMPONENTS_DIR ${PROJECT_BINARY_DIR})
@@ -19,13 +19,12 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
-install(DIRECTORY ${INSTALL_PREFIX}/bin DESTINATION .)
-install(DIRECTORY ${INSTALL_PREFIX}/lib DESTINATION .)
-install(DIRECTORY ${INSTALL_PREFIX}/include DESTINATION .)
+# install(DIRECTORY ${INSTALL_PREFIX}/bin DESTINATION .)
+# install(DIRECTORY ${INSTALL_PREFIX}/lib DESTINATION .)
+# install(DIRECTORY ${INSTALL_PREFIX}/include DESTINATION .)
 
-add_custom_target(clobber
-    COMMAND git clean -d -f -x
-)
+set(CMAKE_PREFIX_PATH ${PROJECT_BINARY_DIR})
+
 
 find_package(Threads)
 
@@ -33,6 +32,10 @@ find_library(DL_LIBRARY dl)
 if(NOT DL_LIBRARY)
     set(DL_LIBRARY "") # change from NOTFOUND to empty when passed to linker
 endif()
+
+add_custom_target(clobber_all
+     COMMAND git clean -d -f -x
+)
 
 ##############################################################################################################
 #
@@ -87,10 +90,15 @@ endif()
 OPTION(build_glslang "Build glslang" ON)
 if (${build_glslang})
     set(glslang "glslang")
-    ExternalProject_Add(glslang
+    FetchContent_Declare(glslang
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/KhronosGroup/glslang.git" GIT_TAG "master"
     )
+    # if(NOT glslang_POPULATED)
+    #     FetchContent_Populate(glslang)
+    #     add_subdirectory(${glslang_SOURCE_DIR} ${glslang_BINARY_DIR})
+    # endif()
+    FetchContent_MakeAvailable(glslang)
 endif()
 
 ##############################################################################################################
@@ -100,11 +108,16 @@ endif()
 OPTION(build_VulkanSceneGraph "Build VulkanSceneGraph" ON)
 if (${build_VulkanSceneGraph})
     set(VulkanSceneGraph "VulkanSceneGraph")
-    ExternalProject_Add(VulkanSceneGraph
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
-        GIT_REPOSITORY "https://github.com/vsg-dev/VulkanSceneGraph.git" GIT_TAG "master"
+    FetchContent_Declare(vsg
+        GIT_REPOSITORY "https://github.com/vsg-dev/VulkanSceneGraph.git" GIT_TAG "removed_clobber"
     )
-    ExternalProject_Add_StepDependencies(VulkanSceneGraph build ${glslang})
+    # FetchContent_MakeAvailable(VulkanSceneGraph)
+    #FetchContent_Declare_StepDependencies(VulkanSceneGraph build ${glslang})
+    # if(NOT vulkanscenegraph_POPULATED)
+    #     FetchContent_Populate(vsg)
+    #     add_subdirectory(${vsg_SOURCE_DIR} ${vsg_BINARY_DIR})
+    # endif()
+    FetchContent_MakeAvailable(vsg)
 endif()
 
 
@@ -112,15 +125,16 @@ endif()
 #
 # vsgGIS
 #
-OPTION(build_vsgGIS "Build vsgGIS" ON)
+OPTION(build_vsgGIS "Build vsgGIS" OFF)
 if (${build_vsgGIS})
     set(vsgGIS "vsgGIS")
-    ExternalProject_Add(vsgGIS
+    FetchContent_Declare(vsggis
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgGIS.git" GIT_TAG "master"
 
     )
-    ExternalProject_Add_StepDependencies(vsgGIS build ${VulkanSceneGraph})
+    # FetchContent_MakeAvailable(vsgGIS)
+    #FetchContent_Declare_StepDependencies(vsgGIS build ${VulkanSceneGraph})
 endif()
 
 
@@ -128,13 +142,14 @@ endif()
 #
 # assimp
 #
-OPTION(build_assimp "Build assimp" ON)
+OPTION(build_assimp "Build assimp" OFF)
 if (${build_assimp})
     set(assimp "assimp")
-    ExternalProject_Add(assimp
+    FetchContent_Declare(assimp
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/assimp/assimp.git" GIT_TAG "master"
     )
+    # FetchContent_MakeAvailable(assimp)
 endif()
 
 
@@ -142,16 +157,15 @@ endif()
 #
 # vsgXchange
 #
-OPTION(build_vsgXchange "Build vsgXchange" ON)
+OPTION(build_vsgXchange "Build vsgXchange" OFF)
 if (${build_vsgXchange})
     set(vsgGIS "vsgGIS")
-    ExternalProject_Add(vsgXchange
-        PREFIX ${COMPONENTS_DIR}
+    FetchContent_Declare(vsgxchange
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgXchange.git"
         GIT_TAG "master"
-        CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
     )
-    ExternalProject_Add_StepDependencies(vsgXchange build ${assimp} ${VulkanSceneGraph} ${vsgGIS})
+    #FetchContent_Declare_StepDependencies(vsgXchange build ${assimp} ${VulkanSceneGraph} ${vsgGIS})
+    # FetchContent_MakeAvailable(vsgXchange)
 endif()
 
 
@@ -159,16 +173,15 @@ endif()
 #
 # vsgImGui
 #
-OPTION(build_vsgImGui "Build vsgImGui" ON)
+OPTION(build_vsgImGui "Build vsgImGui" OFF)
 if (${build_vsgImGui})
     set(vsgGIS "vsgImGui")
-    ExternalProject_Add(vsgImGui
-        PREFIX ${COMPONENTS_DIR}
+    FetchContent_Declare(vsgimgui
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgImGui.git"
         GIT_TAG "master"
-        CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
     )
-    ExternalProject_Add_StepDependencies(vsgImGui build ${VulkanSceneGraph} ${vsgXchange})
+    # FetchContent_MakeAvailable(vsgImGui)
+    #FetchContent_Declare_StepDependencies(vsgImGui build ${VulkanSceneGraph} ${vsgXchange})
 endif()
 
 
@@ -179,11 +192,14 @@ endif()
 OPTION(build_vsgExamples "Build vsgExamples" ON)
 if (${build_vsgExamples})
     set(vsgExamples "vsgExamples")
-    ExternalProject_Add(vsgExamples
-        PREFIX ${COMPONENTS_DIR}
+    FetchContent_Declare(vsgexamples
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgExamples.git"
         GIT_TAG "master"
-        CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
     )
-    ExternalProject_Add_StepDependencies(vsgExamples build ${VulkanSceneGraph} ${vsgXchange} ${vsgImGui})
+    # if(NOT vsgexamples_POPULATED)
+    #     FetchContent_Populate(vsgexamples)
+    #     add_subdirectory(${vsgexamples_SOURCE_DIR} ${vsgexamples_BINARY_DIR})
+    # endif()
+    FetchContent_MakeAvailable(vsgexamples)
 endif()
+
