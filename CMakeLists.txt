@@ -36,7 +36,6 @@ if (NOT VULKAN_FOUND)
     set(VulkanSDKVersion "1.2.176.1" CACHE STRING "Vulkan_SDK version to download")
 
     if (NOT EXISTS ${DOWNLOADS_DIR}/${VulkanSDKVersion})
-
         file(MAKE_DIRECTORY downloads)
 
         if (ANDROID)
@@ -53,100 +52,58 @@ if (NOT VULKAN_FOUND)
             execute_process(COMMAND wget --no-cookies -O ${DOWNLOADS_DIR}/vulkansdk-linux-x86_64-${VulkanSDKVersion}.tar.gz https://sdk.lunarg.com/sdk/download/${VulkanSDKVersion}/linux/vulkansdk-linux-x86_64-${VulkanSDKVersion}.tar.gz)
             execute_process(COMMAND tar -zxf ${DOWNLOADS_DIR}/vulkansdk-linux-x86_64-${VulkanSDKVersion}.tar.gz -C ${DOWNLOADS_DIR})
         endif()
-
     endif()
 
     if (EXISTS ${DOWNLOADS_DIR}/${VulkanSDKVersion})
-
         set(VULKAN_SDK ${DOWNLOADS_DIR}/${VulkanSDKVersion}/x86_64)
         set(ENV{VULKAN_SDK} ${VULKAN_SDK})
         set(EXTRA_CMAKE_ARGS_VULKAN_SDK -DVULKAN_SDK=${VULKAN_SDK})
 
         find_package(Vulkan)
-
     endif()
 endif()
 
+# ExternalComponent macro to help set up external projects and their depdendecies
 macro(ExternalComponent component_name git_repository git_tag)
+    if (build_${component_name})
+        set(${component_name} "${component_name}")
 
-    set(${component_name} "${component_name}")
-
-    ExternalProject_Add(${component_name}
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} GIT_PROGRESS ON
-        GIT_REPOSITORY ${git_repository} GIT_TAG ${git_tag}
-    )
-
+        ExternalProject_Add(${component_name}
+            PREFIX ${COMPONENTS_DIR} 
+            CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} 
+            GIT_PROGRESS ON
+            GIT_REPOSITORY ${git_repository} 
+            GIT_TAG ${git_tag}
+        )
+        
+        ExternalProject_Add_StepDependencies(${component_name} build "${ARGN}")
+    endif()
 endmacro()
 
-##############################################################################################################
-#
 # glslang
-#
 OPTION(build_glslang "Build glslang" ON)
-if (${build_glslang})
-    ExternalComponent(glslang "https://github.com/KhronosGroup/glslang.git" "master")
-endif()
+ExternalComponent(glslang "https://github.com/KhronosGroup/glslang.git" "master")
 
-##############################################################################################################
-#
 # VulkaSceneGraph
-#
 OPTION(build_VulkanSceneGraph "Build VulkanSceneGraph" ON)
-if (${build_VulkanSceneGraph})
-    ExternalComponent(VulkanSceneGraph "https://github.com/vsg-dev/VulkanSceneGraph.git" "master")
-    ExternalProject_Add_StepDependencies(VulkanSceneGraph build ${glslang})
-endif()
+ExternalComponent(VulkanSceneGraph "https://github.com/vsg-dev/VulkanSceneGraph.git" "master" ${glslang})
 
-
-##############################################################################################################
-#
 # vsgGIS
-#
 OPTION(build_vsgGIS "Build vsgGIS" ON)
-if (${build_vsgGIS})
-    ExternalComponent(vsgGIS "https://github.com/vsg-dev/vsgGIS.git" "master")
-    ExternalProject_Add_StepDependencies(vsgGIS build ${VulkanSceneGraph})
-endif()
+ExternalComponent(vsgGIS "https://github.com/vsg-dev/vsgGIS.git" "master" ${VulkanSceneGraph})
 
-
-##############################################################################################################
-#
 # assimp
-#
 OPTION(build_assimp "Build assimp" ON)
-if (${build_assimp})
-    ExternalComponent(assimp "https://github.com/assimp/assimp.git" GIT_TAG "master")
-endif()
+ExternalComponent(assimp "https://github.com/assimp/assimp.git" "master")
 
-
-##############################################################################################################
-#
 # vsgXchange
-#
 OPTION(build_vsgXchange "Build vsgXchange" ON)
-if (${build_vsgXchange})
-    ExternalComponent(vsgXchange "https://github.com/vsg-dev/vsgXchange.git" "master")
-    ExternalProject_Add_StepDependencies(vsgXchange build ${assimp} ${VulkanSceneGraph} ${vsgGIS})
-endif()
+ExternalComponent(vsgXchange "https://github.com/vsg-dev/vsgXchange.git" "master" ${assimp} ${VulkanSceneGraph} ${vsgGIS})
 
-
-##############################################################################################################
-#
 # vsgImGui
-#
 OPTION(build_vsgImGui "Build vsgImGui" ON)
-if (${build_vsgImGui})
-    ExternalComponent(vsgImGui "https://github.com/vsg-dev/vsgImGui.git" "master")
-    ExternalProject_Add_StepDependencies(vsgImGui build ${VulkanSceneGraph} ${vsgXchange})
-endif()
+ExternalComponent(vsgImGui "https://github.com/vsg-dev/vsgImGui.git" "master" ${VulkanSceneGraph} ${vsgXchange})
 
-
-##############################################################################################################
-#
 # vsgExamples
-#
 OPTION(build_vsgExamples "Build vsgExamples" ON)
-if (${build_vsgExamples})
-    ExternalComponent(vsgExamples "https://github.com/vsg-dev/vsgExamples.git" "master")
-    ExternalProject_Add_StepDependencies(vsgExamples build ${VulkanSceneGraph} ${vsgXchange} ${vsgImGui})
-endif()
+ExternalComponent(vsgExamples "https://github.com/vsg-dev/vsgExamples.git" "master" ${VulkanSceneGraph} ${vsgXchange} ${vsgImGui})
