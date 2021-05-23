@@ -64,6 +64,8 @@ if (NOT VULKAN_FOUND)
 endif()
 
 # ExternalComponent macro to help set up external projects and their depdendecies
+# Usage:
+#   ExternalComponent(component_name git_repository_url git_tag [optional_component_dependencies...])
 macro(ExternalComponent component_name git_repository git_tag)
     if (build_${component_name})
         set(${component_name} "${component_name}")
