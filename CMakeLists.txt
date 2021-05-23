@@ -79,6 +79,16 @@ if (NOT VULKAN_FOUND)
     endif()
 endif()
 
+macro(ExternalComponent component_name git_repository git_tag)
+
+    set(${component_name} "${component_name}")
+
+    ExternalProject_Add(${component_name}
+        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} GIT_PROGRESS ON
+        GIT_REPOSITORY ${git_repository} GIT_TAG ${git_tag}
+    )
+
+endmacro()
 
 ##############################################################################################################
 #
@@ -86,11 +96,7 @@ endif()
 #
 OPTION(build_glslang "Build glslang" ON)
 if (${build_glslang})
-    set(glslang "glslang")
-    ExternalProject_Add(glslang
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} GIT_PROGRESS ON
-        GIT_REPOSITORY "https://github.com/KhronosGroup/glslang.git" GIT_TAG "master"
-    )
+    ExternalComponent(glslang "https://github.com/KhronosGroup/glslang.git" "master")
 endif()
 
 ##############################################################################################################
@@ -99,11 +105,7 @@ endif()
 #
 OPTION(build_VulkanSceneGraph "Build VulkanSceneGraph" ON)
 if (${build_VulkanSceneGraph})
-    set(VulkanSceneGraph "VulkanSceneGraph")
-    ExternalProject_Add(VulkanSceneGraph
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} GIT_PROGRESS ON
-        GIT_REPOSITORY "https://github.com/vsg-dev/VulkanSceneGraph.git" GIT_TAG "master"
-    )
+    ExternalComponent(VulkanSceneGraph "https://github.com/vsg-dev/VulkanSceneGraph.git" "master")
     ExternalProject_Add_StepDependencies(VulkanSceneGraph build ${glslang})
 endif()
 
@@ -114,11 +116,7 @@ endif()
 #
 OPTION(build_vsgGIS "Build vsgGIS" ON)
 if (${build_vsgGIS})
-    set(vsgGIS "vsgGIS")
-    ExternalProject_Add(vsgGIS
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
-        GIT_REPOSITORY "https://github.com/vsg-dev/vsgGIS.git" GIT_TAG "master"
-    )
+    ExternalComponent(vsgGIS "https://github.com/vsg-dev/vsgGIS.git" "master")
     ExternalProject_Add_StepDependencies(vsgGIS build ${VulkanSceneGraph})
 endif()
 
@@ -129,11 +127,7 @@ endif()
 #
 OPTION(build_assimp "Build assimp" ON)
 if (${build_assimp})
-    set(assimp "assimp")
-    ExternalProject_Add(assimp
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} GIT_PROGRESS ON
-        GIT_REPOSITORY "https://github.com/assimp/assimp.git" GIT_TAG "master"
-    )
+    ExternalComponent(assimp "https://github.com/assimp/assimp.git" GIT_TAG "master")
 endif()
 
 
@@ -143,11 +137,7 @@ endif()
 #
 OPTION(build_vsgXchange "Build vsgXchange" ON)
 if (${build_vsgXchange})
-    set(vsgGIS "vsgGIS")
-    ExternalProject_Add(vsgXchange
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} GIT_PROGRESS ON
-        GIT_REPOSITORY "https://github.com/vsg-dev/vsgXchange.git" GIT_TAG "master"        
-    )
+    ExternalComponent(vsgXchange "https://github.com/vsg-dev/vsgXchange.git" "master")
     ExternalProject_Add_StepDependencies(vsgXchange build ${assimp} ${VulkanSceneGraph} ${vsgGIS})
 endif()
 
@@ -158,11 +148,7 @@ endif()
 #
 OPTION(build_vsgImGui "Build vsgImGui" ON)
 if (${build_vsgImGui})
-    set(vsgGIS "vsgImGui")
-    ExternalProject_Add(vsgImGui
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} GIT_PROGRESS ON
-        GIT_REPOSITORY "https://github.com/vsg-dev/vsgImGui.git" GIT_TAG "master"
-    )
+    ExternalComponent(vsgImGui "https://github.com/vsg-dev/vsgImGui.git" "master")
     ExternalProject_Add_StepDependencies(vsgImGui build ${VulkanSceneGraph} ${vsgXchange})
 endif()
 
@@ -173,10 +159,6 @@ endif()
 #
 OPTION(build_vsgExamples "Build vsgExamples" ON)
 if (${build_vsgExamples})
-    set(vsgExamples "vsgExamples")
-    ExternalProject_Add(vsgExamples
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} GIT_PROGRESS ON
-        GIT_REPOSITORY "https://github.com/vsg-dev/vsgExamples.git" GIT_TAG "master"
-    )
+    ExternalComponent(vsgExamples "https://github.com/vsg-dev/vsgExamples.git" "master")
     ExternalProject_Add_StepDependencies(vsgExamples build ${VulkanSceneGraph} ${vsgXchange} ${vsgImGui})
 endif()
