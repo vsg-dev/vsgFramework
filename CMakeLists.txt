@@ -1,23 +1,18 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.7)
 
 project(vsgFramework)
 
 include(ExternalProject)
 
-set(DOWNLOADS_DIR ${PROJECT_BINARY_DIR}/downloads)
-set(COMPONENTS_DIR ${PROJECT_BINARY_DIR})
-set(BUILD_INSTALL_PREFIX ${PROJECT_BINARY_DIR} CACHE STRING "Install prefix ")
-set(COMPONENT_CMAKE_OPTIONS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${BUILD_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS})
-
-# set compilation to use C++17
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
 # Change the default build type to Release
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
+
+set(DOWNLOADS_DIR ${PROJECT_BINARY_DIR}/downloads)
+set(COMPONENTS_DIR ${PROJECT_BINARY_DIR})
+set(COMPONENT_INSTALL_PREFIX ${PROJECT_BINARY_DIR} CACHE STRING "Install prefix for components ")
+set(COMPONENT_CMAKE_OPTIONS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${COMPONENT_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS})
 
 install(DIRECTORY ${INSTALL_PREFIX}/bin DESTINATION .)
 install(DIRECTORY ${INSTALL_PREFIX}/lib DESTINATION .)
@@ -26,13 +21,6 @@ install(DIRECTORY ${INSTALL_PREFIX}/include DESTINATION .)
 add_custom_target(clobber
     COMMAND git clean -d -f -x
 )
-
-find_package(Threads)
-
-find_library(DL_LIBRARY dl)
-if(NOT DL_LIBRARY)
-    set(DL_LIBRARY "") # change from NOTFOUND to empty when passed to linker
-endif()
 
 ##############################################################################################################
 #
