@@ -100,7 +100,7 @@ ExternalComponent(assimp "https://github.com/assimp/assimp.git" "master")
 
 # vsgXchange
 OPTION(build_vsgXchange "Build vsgXchange" ON)
-ExternalComponent(vsgXchange "https://github.com/vsg-dev/vsgXchange.git" "master" ${assimp} ${VulkanSceneGraph} ${vsgGIS})
+ExternalComponent(vsgXchange "https://github.com/vsg-dev/vsgXchange.git" "master" ${VulkanSceneGraph} ${vsgGIS} ${assimp})
 
 # vsgImGui
 OPTION(build_vsgImGui "Build vsgImGui" ON)
@@ -108,4 +108,4 @@ ExternalComponent(vsgImGui "https://github.com/vsg-dev/vsgImGui.git" "master" ${
 
 # vsgExamples
 OPTION(build_vsgExamples "Build vsgExamples" ON)
-ExternalComponent(vsgExamples "https://github.com/vsg-dev/vsgExamples.git" "master" ${VulkanSceneGraph} ${vsgXchange} ${vsgImGui})
+ExternalComponent(vsgExamples "https://github.com/vsg-dev/vsgExamples.git" "master" ${VulkanSceneGraph} ${vsgGIS} ${assimp} ${vsgXchange} ${vsgImGui})
