@@ -135,3 +135,7 @@ ExternalComponent(vsgImGui "https://github.com/vsg-dev/vsgImGui.git" "master" ${
 # vsgExamples
 OPTION(BUILD_vsgExamples "Build vsgExamples" ON)
 ExternalComponent(vsgExamples "https://github.com/vsg-dev/vsgExamples.git" "master" ${VulkanSceneGraph} ${vsgGIS} ${assimp} ${vsgXchange} ${vsgImGui})
+
+# vsgQt
+OPTION(BUILD_vsgQt "Build vsgQt" ON)
+ExternalComponent(vsgQt "https://github.com/vsg-dev/vsgQt.git" "master" ${VulkanSceneGraph} ${vsgXchange})
