@@ -24,7 +24,7 @@ install(DIRECTORY ${INSTALL_PREFIX}/lib DESTINATION .)
 install(DIRECTORY ${INSTALL_PREFIX}/include DESTINATION .)
 
 add_custom_target(clobber
-    COMMAND git clean -d -f -x
+    COMMAND git -C ${CMAKE_SOURCE_DIR} clean -d -f -x
 )
 
 ##############################################################################################################
