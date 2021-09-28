@@ -75,7 +75,12 @@ endif()
 # Usage:
 #   ExternalComponent(component_name git_repository_url git_tag [optional_component_dependencies...])
 macro(ExternalComponent component_name git_repository git_tag)
-    if (build_${component_name})
+    # migrate deprecated setting
+    if(build_${component_name})
+        set(BUILD_${component_name} ON)
+        unset(build_${component_name})
+    endif()
+    if (BUILD_${component_name})
         set(${component_name} "${component_name}")
 
         ExternalProject_Add(${component_name}
@@ -104,29 +109,29 @@ endmacro()
 OPTION(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 # glslang
-OPTION(build_glslang "Build glslang" ON)
+OPTION(BUILD_glslang "Build glslang" ON)
 ExternalComponent(glslang "https://github.com/KhronosGroup/glslang.git" "master")
 
 # VulkaSceneGraph
-OPTION(build_VulkanSceneGraph "Build VulkanSceneGraph" ON)
+OPTION(BUILD_VulkanSceneGraph "Build VulkanSceneGraph" ON)
 ExternalComponent(VulkanSceneGraph "https://github.com/vsg-dev/VulkanSceneGraph.git" "master" ${glslang})
 
 # vsgGIS
-OPTION(build_vsgGIS "Build vsgGIS" ON)
+OPTION(BUILD_vsgGIS "Build vsgGIS" ON)
 ExternalComponent(vsgGIS "https://github.com/vsg-dev/vsgGIS.git" "master" ${VulkanSceneGraph})
 
 # assimp
-OPTION(build_assimp "Build assimp" ON)
+OPTION(BUILD_assimp "Build assimp" ON)
 ExternalComponent(assimp "https://github.com/assimp/assimp.git" "master")
 
 # vsgXchange
-OPTION(build_vsgXchange "Build vsgXchange" ON)
+OPTION(BUILD_vsgXchange "Build vsgXchange" ON)
 ExternalComponent(vsgXchange "https://github.com/vsg-dev/vsgXchange.git" "master" ${VulkanSceneGraph} ${vsgGIS} ${assimp})
 
 # vsgImGui
-OPTION(build_vsgImGui "Build vsgImGui" ON)
+OPTION(BUILD_vsgImGui "Build vsgImGui" ON)
 ExternalComponent(vsgImGui "https://github.com/vsg-dev/vsgImGui.git" "master" ${VulkanSceneGraph} ${vsgXchange})
 
 # vsgExamples
-OPTION(build_vsgExamples "Build vsgExamples" ON)
+OPTION(BUILD_vsgExamples "Build vsgExamples" ON)
 ExternalComponent(vsgExamples "https://github.com/vsg-dev/vsgExamples.git" "master" ${VulkanSceneGraph} ${vsgGIS} ${assimp} ${vsgXchange} ${vsgImGui})
