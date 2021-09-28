@@ -28,6 +28,8 @@ add_custom_target(clobber
     COMMAND git -C ${CMAKE_SOURCE_DIR} clean -d -f -x
 )
 
+add_custom_target(clobber-all)
+
 ##############################################################################################################
 #
 # VulkkanSDK
@@ -91,6 +93,11 @@ macro(ExternalComponent component_name git_repository git_tag)
                                      --target clean
         )
         add_dependencies(clean-all clean-${component_name})
+
+        add_custom_target(clobber-${component_name}
+            COMMAND git -C ${CMAKE_BINARY_DIR}/src/${component_name} clean -d -f -x
+        )
+        add_dependencies(clobber-all clobber-${component_name})
     endif()
 endmacro()
 
