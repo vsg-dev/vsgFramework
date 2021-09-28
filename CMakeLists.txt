@@ -23,6 +23,7 @@ install(DIRECTORY ${INSTALL_PREFIX}/bin DESTINATION .)
 install(DIRECTORY ${INSTALL_PREFIX}/lib DESTINATION .)
 install(DIRECTORY ${INSTALL_PREFIX}/include DESTINATION .)
 
+add_custom_target(clean-all)
 add_custom_target(clobber
     COMMAND git -C ${CMAKE_SOURCE_DIR} clean -d -f -x
 )
@@ -84,6 +85,12 @@ macro(ExternalComponent component_name git_repository git_tag)
         )
         
         ExternalProject_Add_StepDependencies(${component_name} build "${ARGN}")
+
+        add_custom_target(clean-${component_name}
+            COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/src/${component_name}-build
+                                     --target clean
+        )
+        add_dependencies(clean-all clean-${component_name})
     endif()
 endmacro()
 
