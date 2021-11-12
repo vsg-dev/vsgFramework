@@ -143,3 +143,7 @@ ExternalComponent(vsgQt "https://github.com/vsg-dev/vsgQt.git" "master" ${Vulkan
 # vsgUnity
 OPTION(BUILD_vsgUnity "Build vsgUnity" OFF)
 ExternalComponent(vsgUnity "https://github.com/vsg-dev/vsgUnity.git" "master" ${VulkanSceneGraph})
+
+# MyFirstVsgApplication
+OPTION(BUILD_MyFirstVsgApplication "Build MyFirstVsgApplication" OFF)
+ExternalComponent(MyFirstVsgApplication "https://github.com/vsg-dev/MyFirstVsgApplication.git" "master" ${VulkanSceneGraph})
