@@ -12,15 +12,23 @@ endif(NOT CMAKE_BUILD_TYPE)
 set(DOWNLOADS_DIR ${PROJECT_BINARY_DIR}/downloads)
 set(COMPONENTS_DIR ${PROJECT_BINARY_DIR})
 set(COMPONENT_INSTALL_PREFIX ${PROJECT_BINARY_DIR} CACHE STRING "Install prefix for components ")
-set(COMPONENT_CMAKE_OPTIONS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${COMPONENT_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS})
+set(COMPONENT_CMAKE_OPTIONS
+    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+    -DCMAKE_INSTALL_PREFIX=${COMPONENT_INSTALL_PREFIX}
+    -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+    -DCMAKE_PREFIX_PATH=${COMPONENT_INSTALL_PREFIX}
+)
 
 install(DIRECTORY ${INSTALL_PREFIX}/bin DESTINATION .)
 install(DIRECTORY ${INSTALL_PREFIX}/lib DESTINATION .)
 install(DIRECTORY ${INSTALL_PREFIX}/include DESTINATION .)
 
+add_custom_target(clean-all)
 add_custom_target(clobber
-    COMMAND git clean -d -f -x
+    COMMAND git -C ${CMAKE_SOURCE_DIR} clean -d -f -x
 )
+
+add_custom_target(clobber-all)
 
 ##############################################################################################################
 #
@@ -67,7 +75,12 @@ endif()
 # Usage:
 #   ExternalComponent(component_name git_repository_url git_tag [optional_component_dependencies...])
 macro(ExternalComponent component_name git_repository git_tag)
-    if (build_${component_name})
+    # migrate deprecated setting
+    if(build_${component_name})
+        set(BUILD_${component_name} ON)
+        unset(build_${component_name})
+    endif()
+    if (BUILD_${component_name})
         set(${component_name} "${component_name}")
 
         ExternalProject_Add(${component_name}
@@ -79,33 +92,58 @@ macro(ExternalComponent component_name git_repository git_tag)
         )
         
         ExternalProject_Add_StepDependencies(${component_name} build "${ARGN}")
+
+        add_custom_target(clean-${component_name}
+            COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/src/${component_name}-build
+                                     --target clean
+        )
+        add_dependencies(clean-all clean-${component_name})
+
+        add_custom_target(clobber-${component_name}
+            COMMAND git -C ${CMAKE_BINARY_DIR}/src/${component_name} clean -d -f -x
+        )
+        add_dependencies(clobber-all clobber-${component_name})
     endif()
 endmacro()
 
+OPTION(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+
 # glslang
-OPTION(build_glslang "Build glslang" ON)
+OPTION(BUILD_glslang "Build glslang" ON)
 ExternalComponent(glslang "https://github.com/KhronosGroup/glslang.git" "master")
 
 # VulkaSceneGraph
-OPTION(build_VulkanSceneGraph "Build VulkanSceneGraph" ON)
+OPTION(BUILD_VulkanSceneGraph "Build VulkanSceneGraph" ON)
 ExternalComponent(VulkanSceneGraph "https://github.com/vsg-dev/VulkanSceneGraph.git" "master" ${glslang})
 
 # vsgGIS
-OPTION(build_vsgGIS "Build vsgGIS" ON)
+OPTION(BUILD_vsgGIS "Build vsgGIS" ON)
 ExternalComponent(vsgGIS "https://github.com/vsg-dev/vsgGIS.git" "master" ${VulkanSceneGraph})
 
 # assimp
-OPTION(build_assimp "Build assimp" ON)
+OPTION(BUILD_assimp "Build assimp" ON)
 ExternalComponent(assimp "https://github.com/assimp/assimp.git" "master")
 
 # vsgXchange
-OPTION(build_vsgXchange "Build vsgXchange" ON)
+OPTION(BUILD_vsgXchange "Build vsgXchange" ON)
 ExternalComponent(vsgXchange "https://github.com/vsg-dev/vsgXchange.git" "master" ${VulkanSceneGraph} ${vsgGIS} ${assimp})
 
 # vsgImGui
-OPTION(build_vsgImGui "Build vsgImGui" ON)
+OPTION(BUILD_vsgImGui "Build vsgImGui" ON)
 ExternalComponent(vsgImGui "https://github.com/vsg-dev/vsgImGui.git" "master" ${VulkanSceneGraph} ${vsgXchange})
 
 # vsgExamples
-OPTION(build_vsgExamples "Build vsgExamples" ON)
+OPTION(BUILD_vsgExamples "Build vsgExamples" ON)
 ExternalComponent(vsgExamples "https://github.com/vsg-dev/vsgExamples.git" "master" ${VulkanSceneGraph} ${vsgGIS} ${assimp} ${vsgXchange} ${vsgImGui})
+
+# vsgQt
+OPTION(BUILD_vsgQt "Build vsgQt" ON)
+ExternalComponent(vsgQt "https://github.com/vsg-dev/vsgQt.git" "master" ${VulkanSceneGraph} ${vsgXchange})
+
+# vsgUnity
+OPTION(BUILD_vsgUnity "Build vsgUnity" OFF)
+ExternalComponent(vsgUnity "https://github.com/vsg-dev/vsgUnity.git" "master" ${VulkanSceneGraph})
+
+# MyFirstVsgApplication
+OPTION(BUILD_MyFirstVsgApplication "Build MyFirstVsgApplication" OFF)
+ExternalComponent(MyFirstVsgApplication "https://github.com/vsg-dev/MyFirstVsgApplication.git" "master" ${VulkanSceneGraph})
