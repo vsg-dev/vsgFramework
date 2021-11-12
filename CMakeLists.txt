@@ -87,6 +87,8 @@ macro(ExternalComponent component_name git_repository git_tag)
     endif()
 endmacro()
 
+OPTION(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+
 # glslang
 OPTION(build_glslang "Build glslang" ON)
 ExternalComponent(glslang "https://github.com/KhronosGroup/glslang.git" "master")
