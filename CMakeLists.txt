@@ -112,6 +112,11 @@ OPTION(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 OPTION(BUILD_glslang "Build glslang" ON)
 ExternalComponent(glslang "https://github.com/KhronosGroup/glslang.git" "master")
 
+# OpenSceneGraph
+OPTION(BUILD_OpenSceneGraph "Build OpenSceneGraph" OFF)
+set(OpenSceneGraph_CMAKE_OPTIONS -DLIB_POSTFIX=64 -DDYNAMIC_OPENSCENEGRAPH=${BUILD_SHARED_LIBS})
+ExternalComponent(OpenSceneGraph "https://github.com/openscenegraph/OpenSceneGraph.git" "OpenSceneGraph-3.6")
+
 # VulkaSceneGraph
 OPTION(BUILD_VulkanSceneGraph "Build VulkanSceneGraph" ON)
 ExternalComponent(VulkanSceneGraph "https://github.com/vsg-dev/VulkanSceneGraph.git" "master" ${glslang})
@@ -126,7 +131,7 @@ ExternalComponent(assimp "https://github.com/assimp/assimp.git" "master")
 
 # vsgXchange
 OPTION(BUILD_vsgXchange "Build vsgXchange" ON)
-ExternalComponent(vsgXchange "https://github.com/vsg-dev/vsgXchange.git" "master" ${VulkanSceneGraph} ${vsgGIS} ${assimp})
+ExternalComponent(vsgXchange "https://github.com/vsg-dev/vsgXchange.git" "master" ${VulkanSceneGraph} ${vsgGIS} ${assimp} ${OpenSceneGraph})
 
 # vsgImGui
 OPTION(BUILD_vsgImGui "Build vsgImGui" ON)
