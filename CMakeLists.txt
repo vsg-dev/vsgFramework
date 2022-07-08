@@ -74,8 +74,12 @@ endif()
 # ExternalComponent macro to help set up external projects and their depdendecies
 # Usage:
 #   ExternalComponent(component_name git_repository_url git_tag [optional_component_dependencies...])
-macro(ExternalComponent component_name git_repository git_tag)
+macro(ExternalComponent component_name in_git_repository in_git_tag)
     # migrate deprecated setting
+
+    set(${component_name}_repository ${in_git_repository} CACHE STRING "${component_name} repository" )
+    set(${component_name}_tag ${in_git_tag} CACHE STRING "${component_name} tag" )
+
     if(build_${component_name})
         set(BUILD_${component_name} ON)
         unset(build_${component_name})
@@ -87,8 +91,8 @@ macro(ExternalComponent component_name git_repository git_tag)
             PREFIX ${COMPONENTS_DIR} 
             CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} 
             GIT_PROGRESS ON
-            GIT_REPOSITORY ${git_repository} 
-            GIT_TAG ${git_tag}
+            GIT_REPOSITORY ${${component_name}_repository}
+            GIT_TAG ${${component_name}_git_tag}
         )
         
         ExternalProject_Add_StepDependencies(${component_name} build "${ARGN}")
@@ -121,17 +125,13 @@ ExternalComponent(OpenSceneGraph "https://github.com/openscenegraph/OpenSceneGra
 OPTION(BUILD_VulkanSceneGraph "Build VulkanSceneGraph" ON)
 ExternalComponent(VulkanSceneGraph "https://github.com/vsg-dev/VulkanSceneGraph.git" "master" ${glslang})
 
-# vsgGIS
-OPTION(BUILD_vsgGIS "Build vsgGIS" ON)
-ExternalComponent(vsgGIS "https://github.com/vsg-dev/vsgGIS.git" "master" ${VulkanSceneGraph})
-
 # assimp
 OPTION(BUILD_assimp "Build assimp" ON)
 ExternalComponent(assimp "https://github.com/assimp/assimp.git" "master")
 
 # vsgXchange
 OPTION(BUILD_vsgXchange "Build vsgXchange" ON)
-ExternalComponent(vsgXchange "https://github.com/vsg-dev/vsgXchange.git" "master" ${VulkanSceneGraph} ${vsgGIS} ${assimp} ${OpenSceneGraph})
+ExternalComponent(vsgXchange "https://github.com/vsg-dev/vsgXchange.git" "master" ${VulkanSceneGraph} ${assimp} ${OpenSceneGraph})
 
 # vsgImGui
 OPTION(BUILD_vsgImGui "Build vsgImGui" ON)
@@ -139,7 +139,7 @@ ExternalComponent(vsgImGui "https://github.com/vsg-dev/vsgImGui.git" "master" ${
 
 # vsgExamples
 OPTION(BUILD_vsgExamples "Build vsgExamples" ON)
-ExternalComponent(vsgExamples "https://github.com/vsg-dev/vsgExamples.git" "master" ${VulkanSceneGraph} ${vsgGIS} ${assimp} ${vsgXchange} ${vsgImGui})
+ExternalComponent(vsgExamples "https://github.com/vsg-dev/vsgExamples.git" "master" ${VulkanSceneGraph} ${assimp} ${vsgXchange} ${vsgImGui})
 
 # vsgQt
 OPTION(BUILD_vsgQt "Build vsgQt" ON)
