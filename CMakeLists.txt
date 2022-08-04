@@ -129,17 +129,21 @@ ExternalComponent(VulkanSceneGraph "https://github.com/vsg-dev/VulkanSceneGraph.
 OPTION(BUILD_assimp "Build assimp" ON)
 ExternalComponent(assimp "https://github.com/assimp/assimp.git" "master")
 
+# osg2vsg
+OPTION(BUILD_vsgXchange "Build osg2vsg" ON)
+ExternalComponent(osg2vsg "https://github.com/vsg-dev/osg2vsg.git" "master" ${VulkanSceneGraph} ${assimp} ${OpenSceneGraph})
+
 # vsgXchange
 OPTION(BUILD_vsgXchange "Build vsgXchange" ON)
-ExternalComponent(vsgXchange "https://github.com/vsg-dev/vsgXchange.git" "master" ${VulkanSceneGraph} ${assimp} ${OpenSceneGraph})
+ExternalComponent(vsgXchange "https://github.com/vsg-dev/vsgXchange.git" "master" ${VulkanSceneGraph} ${assimp} ${OpenSceneGraph} ${osg2vsg} )
 
 # vsgImGui
 OPTION(BUILD_vsgImGui "Build vsgImGui" ON)
-ExternalComponent(vsgImGui "https://github.com/vsg-dev/vsgImGui.git" "master" ${VulkanSceneGraph} ${vsgXchange})
+ExternalComponent(vsgImGui "https://github.com/vsg-dev/vsgImGui.git" "master" ${VulkanSceneGraph})
 
 # vsgExamples
 OPTION(BUILD_vsgExamples "Build vsgExamples" ON)
-ExternalComponent(vsgExamples "https://github.com/vsg-dev/vsgExamples.git" "master" ${VulkanSceneGraph} ${assimp} ${vsgXchange} ${vsgImGui})
+ExternalComponent(vsgExamples "https://github.com/vsg-dev/vsgExamples.git" "master" ${VulkanSceneGraph} ${assimp} ${osg2vsg} ${vsgXchange} ${vsgImGui})
 
 # vsgQt
 OPTION(BUILD_vsgQt "Build vsgQt" ON)
