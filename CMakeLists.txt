@@ -92,7 +92,8 @@ if (${build_glslang})
     set(glslang "glslang")
     FetchContent_Declare(glslang
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
-        GIT_REPOSITORY "https://github.com/KhronosGroup/glslang.git" GIT_TAG "master"
+        GIT_REPOSITORY "https://github.com/KhronosGroup/glslang.git"
+        GIT_TAG "master"
     )
     # if(NOT glslang_POPULATED)
     #     FetchContent_Populate(glslang)
@@ -109,14 +110,10 @@ OPTION(build_VulkanSceneGraph "Build VulkanSceneGraph" ON)
 if (${build_VulkanSceneGraph})
     set(VulkanSceneGraph "VulkanSceneGraph")
     FetchContent_Declare(vsg
-        GIT_REPOSITORY "https://github.com/vsg-dev/VulkanSceneGraph.git" GIT_TAG "master"
+        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
+        GIT_REPOSITORY "https://github.com/vsg-dev/VulkanSceneGraph.git"
+        GIT_TAG "BuildFlexibility"
     )
-    # FetchContent_MakeAvailable(VulkanSceneGraph)
-    #FetchContent_Declare_StepDependencies(VulkanSceneGraph build ${glslang})
-    # if(NOT vulkanscenegraph_POPULATED)
-    #     FetchContent_Populate(vsg)
-    #     add_subdirectory(${vsg_SOURCE_DIR} ${vsg_BINARY_DIR})
-    # endif()
     FetchContent_MakeAvailable(vsg)
 endif()
 
@@ -125,15 +122,15 @@ endif()
 #
 # osg2vsg
 #
-OPTION(build_osg2vsg "Build osg2vsg" OFF)
+OPTION(build_osg2vsg "Build osg2vsg" ON)
 if (${build_osg2vsg})
     set(osg2vsg "osg2vsg")
     FetchContent_Declare(osg2vsg
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
-        GIT_REPOSITORY "https://github.com/vsg-dev/osg2vsg.git" GIT_TAG "master"
+        GIT_REPOSITORY "https://github.com/vsg-dev/osg2vsg.git"
+        GIT_TAG "BuildFlexibility"
     )
-    # FetchContent_MakeAvailable(osg2vsg)
-    #FetchContent_Declare_StepDependencies(osg2vsg build ${VulkanSceneGraph})
+    FetchContent_MakeAvailable(osg2vsg)
 endif()
 
 
@@ -146,7 +143,8 @@ if (${build_assimp})
     set(assimp "assimp")
     FetchContent_Declare(assimp
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
-        GIT_REPOSITORY "https://github.com/assimp/assimp.git" GIT_TAG "master"
+        GIT_REPOSITORY "https://github.com/assimp/assimp.git"
+        GIT_TAG "master"
     )
     # FetchContent_MakeAvailable(assimp)
 endif()
@@ -156,15 +154,15 @@ endif()
 #
 # vsgXchange
 #
-OPTION(build_vsgXchange "Build vsgXchange" OFF)
+OPTION(build_vsgXchange "Build vsgXchange" ON)
 if (${build_vsgXchange})
     set(vsgXchange "vsgXchange")
     FetchContent_Declare(vsgxchange
+        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgXchange.git"
-        GIT_TAG "master"
+        GIT_TAG "BuildFlexibility"
     )
-    #FetchContent_Declare_StepDependencies(vsgXchange build ${assimp} ${VulkanSceneGraph} ${osg2vsg})
-    # FetchContent_MakeAvailable(vsgXchange)
+    FetchContent_MakeAvailable(vsgXchange)
 endif()
 
 
@@ -176,11 +174,11 @@ OPTION(build_vsgImGui "Build vsgImGui" OFF)
 if (${build_vsgImGui})
     set(vsgImGui "vsgImGui")
     FetchContent_Declare(vsgimgui
+        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgImGui.git"
-        GIT_TAG "master"
+        GIT_TAG "BuildFlexibility"
     )
     # FetchContent_MakeAvailable(vsgImGui)
-    #FetchContent_Declare_StepDependencies(vsgImGui build ${VulkanSceneGraph} ${vsgXchange})
 endif()
 
 
@@ -192,6 +190,7 @@ OPTION(build_vsgExamples "Build vsgExamples" ON)
 if (${build_vsgExamples})
     set(vsgExamples "vsgExamples")
     FetchContent_Declare(vsgexamples
+        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgExamples.git"
         GIT_TAG "master"
     )
