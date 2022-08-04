@@ -109,7 +109,7 @@ OPTION(build_VulkanSceneGraph "Build VulkanSceneGraph" ON)
 if (${build_VulkanSceneGraph})
     set(VulkanSceneGraph "VulkanSceneGraph")
     FetchContent_Declare(vsg
-        GIT_REPOSITORY "https://github.com/vsg-dev/VulkanSceneGraph.git" GIT_TAG "removed_clobber"
+        GIT_REPOSITORY "https://github.com/vsg-dev/VulkanSceneGraph.git" GIT_TAG "master"
     )
     # FetchContent_MakeAvailable(VulkanSceneGraph)
     #FetchContent_Declare_StepDependencies(VulkanSceneGraph build ${glslang})
@@ -123,18 +123,17 @@ endif()
 
 ##############################################################################################################
 #
-# vsgGIS
+# osg2vsg
 #
-OPTION(build_vsgGIS "Build vsgGIS" OFF)
-if (${build_vsgGIS})
-    set(vsgGIS "vsgGIS")
-    FetchContent_Declare(vsggis
+OPTION(build_osg2vsg "Build osg2vsg" OFF)
+if (${build_osg2vsg})
+    set(osg2vsg "osg2vsg")
+    FetchContent_Declare(osg2vsg
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
-        GIT_REPOSITORY "https://github.com/vsg-dev/vsgGIS.git" GIT_TAG "master"
-
+        GIT_REPOSITORY "https://github.com/vsg-dev/osg2vsg.git" GIT_TAG "master"
     )
-    # FetchContent_MakeAvailable(vsgGIS)
-    #FetchContent_Declare_StepDependencies(vsgGIS build ${VulkanSceneGraph})
+    # FetchContent_MakeAvailable(osg2vsg)
+    #FetchContent_Declare_StepDependencies(osg2vsg build ${VulkanSceneGraph})
 endif()
 
 
@@ -159,12 +158,12 @@ endif()
 #
 OPTION(build_vsgXchange "Build vsgXchange" OFF)
 if (${build_vsgXchange})
-    set(vsgGIS "vsgGIS")
+    set(vsgXchange "vsgXchange")
     FetchContent_Declare(vsgxchange
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgXchange.git"
         GIT_TAG "master"
     )
-    #FetchContent_Declare_StepDependencies(vsgXchange build ${assimp} ${VulkanSceneGraph} ${vsgGIS})
+    #FetchContent_Declare_StepDependencies(vsgXchange build ${assimp} ${VulkanSceneGraph} ${osg2vsg})
     # FetchContent_MakeAvailable(vsgXchange)
 endif()
 
@@ -175,7 +174,7 @@ endif()
 #
 OPTION(build_vsgImGui "Build vsgImGui" OFF)
 if (${build_vsgImGui})
-    set(vsgGIS "vsgImGui")
+    set(vsgImGui "vsgImGui")
     FetchContent_Declare(vsgimgui
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgImGui.git"
         GIT_TAG "master"
