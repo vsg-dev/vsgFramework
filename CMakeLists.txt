@@ -87,7 +87,7 @@ endif()
 #
 # glslang
 #
-OPTION(build_glslang "Build glslang" ON)
+OPTION(build_glslang "Build glslang" OFF)
 if (${build_glslang})
     set(glslang "glslang")
     FetchContent_Declare(glslang
@@ -110,11 +110,12 @@ OPTION(build_VulkanSceneGraph "Build VulkanSceneGraph" ON)
 if (${build_VulkanSceneGraph})
     set(VulkanSceneGraph "VulkanSceneGraph")
     FetchContent_Declare(vsg
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
-        GIT_REPOSITORY "https://github.com/vsg-dev/VulkanSceneGraph.git"
-        GIT_TAG "BuildFlexibility"
+        GIT_REPOSITORY https://github.com/vsg-dev/VulkanSceneGraph.git
+        GIT_TAG BuildFlexibility
     )
     FetchContent_MakeAvailable(vsg)
+
+    set(vsg_DIR ${CMAKE_SOURCE_DIR}/_deps/vsg-build/src/vsg/)
 endif()
 
 
@@ -122,7 +123,7 @@ endif()
 #
 # osg2vsg
 #
-OPTION(build_osg2vsg "Build osg2vsg" ON)
+OPTION(build_osg2vsg "Build osg2vsg" OFF)
 if (${build_osg2vsg})
     set(osg2vsg "osg2vsg")
     FetchContent_Declare(osg2vsg
@@ -158,13 +159,13 @@ OPTION(build_vsgXchange "Build vsgXchange" ON)
 if (${build_vsgXchange})
     set(vsgXchange "vsgXchange")
     FetchContent_Declare(vsgxchange
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
-        GIT_REPOSITORY "https://github.com/vsg-dev/vsgXchange.git"
-        GIT_TAG "BuildFlexibility"
+        GIT_REPOSITORY https://github.com/vsg-dev/vsgXchange.git
+        GIT_TAG BuildFlexibility
     )
     FetchContent_MakeAvailable(vsgXchange)
 endif()
 
+#FetchContent_MakeAvailable(vsg vsgXchange)
 
 ##############################################################################################################
 #
@@ -186,7 +187,7 @@ endif()
 #
 # vsgExamples
 #
-OPTION(build_vsgExamples "Build vsgExamples" ON)
+OPTION(build_vsgExamples "Build vsgExamples" OFF)
 if (${build_vsgExamples})
     set(vsgExamples "vsgExamples")
     FetchContent_Declare(vsgexamples
