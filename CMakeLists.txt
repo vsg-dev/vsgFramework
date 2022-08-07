@@ -112,12 +112,35 @@ if (${build_VulkanSceneGraph})
     FetchContent_Declare(vsg
         GIT_REPOSITORY https://github.com/vsg-dev/VulkanSceneGraph.git
         GIT_TAG BuildFlexibility
+        #OVERRIDE_FIND_PACKAGE
+        #FIND_PACKAGE_ARGS NAMES vsg::vsg
     )
     FetchContent_MakeAvailable(vsg)
 
-    set(vsg_DIR ${CMAKE_SOURCE_DIR}/_deps/vsg-build/src/vsg/)
+    #include(CMakeFindDependencyMacro)
+    #find_dependency(vsg)
+
+
+    #set(vsg_LIBRARIES vsg::vsg)
+    #set(vsg_FOUND TRUE)
+    #set(vsg_DIR ${vsg_SOURCE_DIR}src/vsg/)
+
+    #message("vsg_SOURCE_DIR = " ${vsg_SOURCE_DIR})
+    #message("vsg_DIR = " ${vsg_DIR})
+
+    # install(TARGETS vsg
+    #         EXPORT ${PROJECT_NAME}Targets
+    # )
+
+    #FetchContent_Populate(vsg)
+    #add_subdirectory(${vsg_SOURCE_DIR})
+    #list(APPEND CMAKE_MODULE_PATH ${vsg_SOURCE_DIR}/src/vsg/)
+    #list(APPEND CMAKE_MODULE_PATH ${vsg_SOURCE_DIR}/src/vsg/CMakeFiles/Export/lib/cmake/vsg/)
+    #set(vsg_FOUND TRUE)
+    #set(vsg_LIBRARIES vsg::vsg)
 endif()
 
+message("\n++++++++++ ONE vsg_SOURCE_DIR = " ${vsg_SOURCE_DIR})
 
 ##############################################################################################################
 #
@@ -147,9 +170,10 @@ if (${build_assimp})
         GIT_REPOSITORY "https://github.com/assimp/assimp.git"
         GIT_TAG "master"
     )
-    # FetchContent_MakeAvailable(assimp)
+    FetchContent_MakeAvailable(assimp)
 endif()
 
+find_package(vsg)
 
 ##############################################################################################################
 #
@@ -161,11 +185,19 @@ if (${build_vsgXchange})
     FetchContent_Declare(vsgxchange
         GIT_REPOSITORY https://github.com/vsg-dev/vsgXchange.git
         GIT_TAG BuildFlexibility
-    )
-    FetchContent_MakeAvailable(vsgXchange)
+#        OVERRIDE_FIND_PACKAGE
+#        FIND_PACKAGE_ARGS NAMES vsgXchange
+)
+
+    #FetchContent_Populate(vsgxchange)
+    # message("\n++++++++++ vsgxchange_SOURCE_DIR = " ${vsgxchange_SOURCE_DIR})
+    # add_subdirectory(${vsgxchange_SOURCE_DIR})
+    FetchContent_MakeAvailable(vsgxchange)
 endif()
 
-#FetchContent_MakeAvailable(vsg vsgXchange)
+#FetchContent_MakeAvailable(vsg vsgxchange)
+message("\n++++++++++ TWO vsg_SOURCE_DIR = " ${vsg_SOURCE_DIR})
+message("\n++++++++++ TWO vsgxchange_SOURCE_DIR = " ${vsgxchange_SOURCE_DIR})
 
 ##############################################################################################################
 #
