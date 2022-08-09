@@ -34,7 +34,7 @@ if(NOT DL_LIBRARY)
 endif()
 
 add_custom_target(clobber_all
-     COMMAND git clean -d -f -x
+     COMMAND rm -rf CMakeCache.txt _deps cmake_install.cmake CMakeFiles src tmp Makefile install_manifest.txt
 )
 
 ##############################################################################################################
@@ -112,8 +112,7 @@ if (${build_VulkanSceneGraph})
     FetchContent_Declare(vsg
         GIT_REPOSITORY https://github.com/vsg-dev/VulkanSceneGraph.git
         GIT_TAG BuildFlexibility
-        #OVERRIDE_FIND_PACKAGE
-        #FIND_PACKAGE_ARGS NAMES vsg::vsg
+        GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(vsg)
 endif()
@@ -129,6 +128,7 @@ if (${build_osg2vsg})
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/vsg-dev/osg2vsg.git"
         GIT_TAG "BuildFlexibility"
+        GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(osg2vsg)
 endif()
@@ -145,6 +145,7 @@ if (${build_assimp})
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/assimp/assimp.git"
         GIT_TAG "master"
+        GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(assimp)
 endif()
@@ -159,13 +160,8 @@ if (${build_vsgXchange})
     FetchContent_Declare(vsgxchange
         GIT_REPOSITORY https://github.com/vsg-dev/vsgXchange.git
         GIT_TAG BuildFlexibility
-#        OVERRIDE_FIND_PACKAGE
-#        FIND_PACKAGE_ARGS NAMES vsgXchange
+        GIT_PROGRESS TRUE
 )
-
-    #FetchContent_Populate(vsgxchange)
-    # message("\n++++++++++ vsgxchange_SOURCE_DIR = " ${vsgxchange_SOURCE_DIR})
-    # add_subdirectory(${vsgxchange_SOURCE_DIR})
     FetchContent_MakeAvailable(vsgxchange)
 endif()
 
@@ -180,6 +176,8 @@ if (${build_vsgImGui})
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgImGui.git"
         GIT_TAG "BuildFlexibility"
+        GIT_SUBMODULES "src/imgui"
+        GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(vsgImGui)
 endif()
@@ -196,13 +194,15 @@ if (${build_vsgExamples})
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgExamples.git"
         GIT_TAG "BuildFlexibility"
+        GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(vsgexamples)
 endif()
 
 
 #FetchContent_MakeAvailable(vsg vsgxchange)
-message("++++++++++ TWO vsg_SOURCE_DIR = " ${vsg_SOURCE_DIR})
-message("++++++++++ TWO osg2vsg_SOURCE_DIR = " ${osg2vsg_SOURCE_DIR})
-message("++++++++++ TWO vsgxchange_SOURCE_DIR = " ${vsgxchange_SOURCE_DIR})
-message("++++++++++ TWO vsgexamples_SOURCE_DIR = " ${vsgexamples_SOURCE_DIR})
+message("++++++++++ vsg_SOURCE_DIR = " ${vsg_SOURCE_DIR})
+message("++++++++++ osg2vsg_SOURCE_DIR = " ${osg2vsg_SOURCE_DIR})
+message("++++++++++ vsgxchange_SOURCE_DIR = " ${vsgxchange_SOURCE_DIR})
+message("++++++++++ vsgimgui_SOURCE_DIR = " ${vsgimgui_SOURCE_DIR})
+message("++++++++++ vsgexamples_SOURCE_DIR = " ${vsgexamples_SOURCE_DIR})
