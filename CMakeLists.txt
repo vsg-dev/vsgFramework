@@ -173,7 +173,7 @@ endif()
 #
 # vsgImGui
 #
-OPTION(build_vsgImGui "Build vsgImGui" OFF)
+OPTION(build_vsgImGui "Build vsgImGui" ON)
 if (${build_vsgImGui})
     #set(vsgImGui "vsgImGui")
     FetchContent_Declare(vsgimgui
