@@ -116,31 +116,7 @@ if (${build_VulkanSceneGraph})
         #FIND_PACKAGE_ARGS NAMES vsg::vsg
     )
     FetchContent_MakeAvailable(vsg)
-
-    #include(CMakeFindDependencyMacro)
-    #find_dependency(vsg)
-
-
-    #set(vsg_LIBRARIES vsg::vsg)
-    #set(vsg_FOUND TRUE)
-    #set(vsg_DIR ${vsg_SOURCE_DIR}src/vsg/)
-
-    #message("vsg_SOURCE_DIR = " ${vsg_SOURCE_DIR})
-    #message("vsg_DIR = " ${vsg_DIR})
-
-    # install(TARGETS vsg
-    #         EXPORT ${PROJECT_NAME}Targets
-    # )
-
-    #FetchContent_Populate(vsg)
-    #add_subdirectory(${vsg_SOURCE_DIR})
-    #list(APPEND CMAKE_MODULE_PATH ${vsg_SOURCE_DIR}/src/vsg/)
-    #list(APPEND CMAKE_MODULE_PATH ${vsg_SOURCE_DIR}/src/vsg/CMakeFiles/Export/lib/cmake/vsg/)
-    #set(vsg_FOUND TRUE)
-    #set(vsg_LIBRARIES vsg::vsg)
 endif()
-
-message("\n++++++++++ ONE vsg_SOURCE_DIR = " ${vsg_SOURCE_DIR})
 
 ##############################################################################################################
 #
@@ -197,7 +173,7 @@ endif()
 #
 # vsgImGui
 #
-OPTION(build_vsgImGui "Build vsgImGui" ON)
+OPTION(build_vsgImGui "Build vsgImGui" OFF)
 if (${build_vsgImGui})
     #set(vsgImGui "vsgImGui")
     FetchContent_Declare(vsgimgui
@@ -213,13 +189,13 @@ endif()
 #
 # vsgExamples
 #
-OPTION(build_vsgExamples "Build vsgExamples" ON)
+OPTION(build_vsgExamples "Build vsgExamples" OFF)
 if (${build_vsgExamples})
     #set(vsgExamples "vsgExamples")
     FetchContent_Declare(vsgexamples
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgExamples.git"
-        GIT_TAG "master"
+        GIT_TAG "BuildFlexibility"
     )
     FetchContent_MakeAvailable(vsgexamples)
 endif()
