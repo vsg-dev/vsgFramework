@@ -189,7 +189,7 @@ endif()
 #
 # vsgExamples
 #
-OPTION(build_vsgExamples "Build vsgExamples" OFF)
+OPTION(build_vsgExamples "Build vsgExamples" ON)
 if (${build_vsgExamples})
     #set(vsgExamples "vsgExamples")
     FetchContent_Declare(vsgexamples
