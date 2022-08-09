@@ -146,7 +146,7 @@ message("\n++++++++++ ONE vsg_SOURCE_DIR = " ${vsg_SOURCE_DIR})
 #
 # osg2vsg
 #
-OPTION(build_osg2vsg "Build osg2vsg" OFF)
+OPTION(build_osg2vsg "Build osg2vsg" ON)
 if (${build_osg2vsg})
     set(osg2vsg "osg2vsg")
     FetchContent_Declare(osg2vsg
@@ -173,15 +173,13 @@ if (${build_assimp})
     FetchContent_MakeAvailable(assimp)
 endif()
 
-find_package(vsg)
-
 ##############################################################################################################
 #
 # vsgXchange
 #
 OPTION(build_vsgXchange "Build vsgXchange" ON)
 if (${build_vsgXchange})
-    set(vsgXchange "vsgXchange")
+    #set(vsgXchange "vsgXchange")
     FetchContent_Declare(vsgxchange
         GIT_REPOSITORY https://github.com/vsg-dev/vsgXchange.git
         GIT_TAG BuildFlexibility
@@ -195,23 +193,19 @@ if (${build_vsgXchange})
     FetchContent_MakeAvailable(vsgxchange)
 endif()
 
-#FetchContent_MakeAvailable(vsg vsgxchange)
-message("\n++++++++++ TWO vsg_SOURCE_DIR = " ${vsg_SOURCE_DIR})
-message("\n++++++++++ TWO vsgxchange_SOURCE_DIR = " ${vsgxchange_SOURCE_DIR})
-
 ##############################################################################################################
 #
 # vsgImGui
 #
-OPTION(build_vsgImGui "Build vsgImGui" OFF)
+OPTION(build_vsgImGui "Build vsgImGui" ON)
 if (${build_vsgImGui})
-    set(vsgImGui "vsgImGui")
+    #set(vsgImGui "vsgImGui")
     FetchContent_Declare(vsgimgui
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgImGui.git"
         GIT_TAG "BuildFlexibility"
     )
-    # FetchContent_MakeAvailable(vsgImGui)
+    FetchContent_MakeAvailable(vsgImGui)
 endif()
 
 
@@ -219,18 +213,20 @@ endif()
 #
 # vsgExamples
 #
-OPTION(build_vsgExamples "Build vsgExamples" OFF)
+OPTION(build_vsgExamples "Build vsgExamples" ON)
 if (${build_vsgExamples})
-    set(vsgExamples "vsgExamples")
+    #set(vsgExamples "vsgExamples")
     FetchContent_Declare(vsgexamples
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgExamples.git"
         GIT_TAG "master"
     )
-    # if(NOT vsgexamples_POPULATED)
-    #     FetchContent_Populate(vsgexamples)
-    #     add_subdirectory(${vsgexamples_SOURCE_DIR} ${vsgexamples_BINARY_DIR})
-    # endif()
     FetchContent_MakeAvailable(vsgexamples)
 endif()
 
+
+#FetchContent_MakeAvailable(vsg vsgxchange)
+message("++++++++++ TWO vsg_SOURCE_DIR = " ${vsg_SOURCE_DIR})
+message("++++++++++ TWO osg2vsg_SOURCE_DIR = " ${osg2vsg_SOURCE_DIR})
+message("++++++++++ TWO vsgxchange_SOURCE_DIR = " ${vsgxchange_SOURCE_DIR})
+message("++++++++++ TWO vsgexamples_SOURCE_DIR = " ${vsgexamples_SOURCE_DIR})
