@@ -31,7 +31,7 @@ if(NOT DL_LIBRARY)
 endif()
 
 add_custom_target(clobber
-     COMMAND rm -rf ${COMPONENTS_DIR} CMakeCache.txt CMakeFiles cmake_install.cmake Makefile
+     COMMAND rm -rf ${COMPONENTS_DIR} CMakeCache.txt CMakeFiles cmake_install.cmake Makefile install_manifest.txt
 )
 
 ##############################################################################################################
@@ -84,8 +84,8 @@ endif()
 #
 # glslang
 #
-OPTION(build_glslang "Build glslang" OFF)
-if (${build_glslang})
+OPTION(Build_glslang "Build glslang" OFF)
+if (${Build_glslang})
     FetchContent_Declare(glslang
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/KhronosGroup/glslang.git"
@@ -99,8 +99,8 @@ endif()
 #
 # VulkaSceneGraph
 #
-OPTION(build_VulkanSceneGraph "Build VulkanSceneGraph" ON)
-if (${build_VulkanSceneGraph})
+OPTION(Build_VulkanSceneGraph "Build VulkanSceneGraph" ON)
+if (${Build_VulkanSceneGraph})
     FetchContent_Declare(vsg
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY https://github.com/vsg-dev/VulkanSceneGraph.git
@@ -114,8 +114,8 @@ endif()
 #
 # osg2vsg
 #
-OPTION(build_osg2vsg "Build osg2vsg" ON)
-if (${build_osg2vsg})
+OPTION(Build_osg2vsg "Build osg2vsg" ON)
+if (${Build_osg2vsg})
     FetchContent_Declare(osg2vsg
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/vsg-dev/osg2vsg.git"
@@ -130,8 +130,8 @@ endif()
 #
 # assimp
 #
-OPTION(build_assimp "Build assimp" OFF)
-if (${build_assimp})
+OPTION(Build_assimp "Build assimp" OFF)
+if (${Build_assimp})
     FetchContent_Declare(assimp
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/assimp/assimp.git"
@@ -145,8 +145,8 @@ endif()
 #
 # vsgXchange
 #
-OPTION(build_vsgXchange "Build vsgXchange" ON)
-if (${build_vsgXchange})
+OPTION(Build_vsgXchange "Build vsgXchange" ON)
+if (${Build_vsgXchange})
     FetchContent_Declare(vsgxchange
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY https://github.com/vsg-dev/vsgXchange.git
@@ -160,8 +160,8 @@ endif()
 #
 # vsgImGui
 #
-OPTION(build_vsgImGui "Build vsgImGui" ON)
-if (${build_vsgImGui})
+OPTION(Build_vsgImGui "Build vsgImGui" ON)
+if (${Build_vsgImGui})
     FetchContent_Declare(vsgimgui
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgImGui.git"
@@ -177,8 +177,8 @@ endif()
 #
 # vsgExamples
 #
-OPTION(build_vsgExamples "Build vsgExamples" ON)
-if (${build_vsgExamples})
+OPTION(Build_vsgExamples "Build vsgExamples" ON)
+if (${Build_vsgExamples})
     FetchContent_Declare(vsgexamples
         PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgExamples.git"
