@@ -20,11 +20,7 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
-# install(DIRECTORY ${INSTALL_PREFIX}/bin DESTINATION .)
-# install(DIRECTORY ${INSTALL_PREFIX}/lib DESTINATION .)
-# install(DIRECTORY ${INSTALL_PREFIX}/include DESTINATION .)
-
-set(CMAKE_PREFIX_PATH ${PROJECT_BINARY_DIR})
+#set(CMAKE_PREFIX_PATH ${PROJECT_BINARY_DIR})
 
 
 find_package(Threads)
@@ -34,8 +30,8 @@ if(NOT DL_LIBRARY)
     set(DL_LIBRARY "") # change from NOTFOUND to empty when passed to linker
 endif()
 
-add_custom_target(clobber_all
-     COMMAND rm -rf CMakeCache.txt _deps cmake_install.cmake CMakeFiles src tmp Makefile install_manifest.txt
+add_custom_target(clobber
+     COMMAND rm -rf ${COMPONENTS_DIR} CMakeCache.txt CMakeFiles cmake_install.cmake Makefile
 )
 
 ##############################################################################################################
