@@ -7,8 +7,6 @@ set(FETCHCONTENT_QUIET FALSE)
 
 set(DOWNLOADS_DIR ${PROJECT_BINARY_DIR}/downloads)
 set(COMPONENTS_DIR ${PROJECT_BINARY_DIR}/components)
-set(BUILD_INSTALL_PREFIX ${PROJECT_BINARY_DIR} CACHE STRING "Install prefix ")
-set(COMPONENT_CMAKE_OPTIONS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${BUILD_INSTALL_PREFIX} -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS})
 set(FETCHCONTENT_BASE_DIR ${COMPONENTS_DIR})
 
 # set compilation to use C++17
@@ -87,7 +85,7 @@ endif()
 OPTION(Build_glslang "Build glslang" OFF)
 if (${Build_glslang})
     FetchContent_Declare(glslang
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
+        PREFIX ${COMPONENTS_DIR}
         GIT_REPOSITORY "https://github.com/KhronosGroup/glslang.git"
         GIT_TAG "master"
         GIT_PROGRESS TRUE
@@ -102,7 +100,7 @@ endif()
 OPTION(Build_VulkanSceneGraph "Build VulkanSceneGraph" ON)
 if (${Build_VulkanSceneGraph})
     FetchContent_Declare(vsg
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
+        PREFIX ${COMPONENTS_DIR}
         GIT_REPOSITORY https://github.com/vsg-dev/VulkanSceneGraph.git
         GIT_TAG BuildFlexibility
         GIT_PROGRESS TRUE
@@ -117,7 +115,7 @@ endif()
 OPTION(Build_osg2vsg "Build osg2vsg" ON)
 if (${Build_osg2vsg})
     FetchContent_Declare(osg2vsg
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
+        PREFIX ${COMPONENTS_DIR}
         GIT_REPOSITORY "https://github.com/vsg-dev/osg2vsg.git"
         GIT_TAG "BuildFlexibility"
         GIT_PROGRESS TRUE
@@ -133,7 +131,7 @@ endif()
 OPTION(Build_assimp "Build assimp" OFF)
 if (${Build_assimp})
     FetchContent_Declare(assimp
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
+        PREFIX ${COMPONENTS_DIR}
         GIT_REPOSITORY "https://github.com/assimp/assimp.git"
         GIT_TAG "master"
         GIT_PROGRESS TRUE
@@ -148,7 +146,7 @@ endif()
 OPTION(Build_vsgXchange "Build vsgXchange" ON)
 if (${Build_vsgXchange})
     FetchContent_Declare(vsgxchange
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
+        PREFIX ${COMPONENTS_DIR}
         GIT_REPOSITORY https://github.com/vsg-dev/vsgXchange.git
         GIT_TAG BuildFlexibility
         GIT_PROGRESS TRUE
@@ -163,15 +161,30 @@ endif()
 OPTION(Build_vsgImGui "Build vsgImGui" ON)
 if (${Build_vsgImGui})
     FetchContent_Declare(vsgimgui
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
+        PREFIX ${COMPONENTS_DIR}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgImGui.git"
         GIT_TAG "BuildFlexibility"
         GIT_SUBMODULES "src/imgui"
         GIT_PROGRESS TRUE
     )
-    FetchContent_MakeAvailable(vsgImGui)
+    FetchContent_MakeAvailable(vsgimgui)
 endif()
 
+
+##############################################################################################################
+#
+# vsgQt
+#
+OPTION(Build_vsgQt "Build vsgQt" OFF)
+if (${Build_vsgQt})
+    FetchContent_Declare(vsgqt
+        PREFIX ${COMPONENTS_DIR}
+        GIT_REPOSITORY "https://github.com/vsg-dev/vsgQt.git"
+        GIT_TAG "BuildFlexibility"
+        GIT_PROGRESS TRUE
+    )
+    FetchContent_MakeAvailable(vsgqt)
+endif()
 
 ##############################################################################################################
 #
@@ -180,7 +193,7 @@ endif()
 OPTION(Build_vsgExamples "Build vsgExamples" ON)
 if (${Build_vsgExamples})
     FetchContent_Declare(vsgexamples
-        PREFIX ${COMPONENTS_DIR} CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS}
+        PREFIX ${COMPONENTS_DIR}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgExamples.git"
         GIT_TAG "BuildFlexibility"
         GIT_PROGRESS TRUE
