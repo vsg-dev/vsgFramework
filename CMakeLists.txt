@@ -85,7 +85,6 @@ endif()
 OPTION(Build_glslang "Build glslang" OFF)
 if (${Build_glslang})
     FetchContent_Declare(glslang
-        PREFIX ${COMPONENTS_DIR}
         GIT_REPOSITORY "https://github.com/KhronosGroup/glslang.git"
         GIT_TAG "master"
         GIT_PROGRESS TRUE
@@ -100,7 +99,6 @@ endif()
 OPTION(Build_VulkanSceneGraph "Build VulkanSceneGraph" ON)
 if (${Build_VulkanSceneGraph})
     FetchContent_Declare(vsg
-        PREFIX ${COMPONENTS_DIR}
         GIT_REPOSITORY https://github.com/vsg-dev/VulkanSceneGraph.git
         GIT_TAG BuildFlexibility
         GIT_PROGRESS TRUE
@@ -115,7 +113,6 @@ endif()
 OPTION(Build_osg2vsg "Build osg2vsg" ON)
 if (${Build_osg2vsg})
     FetchContent_Declare(osg2vsg
-        PREFIX ${COMPONENTS_DIR}
         GIT_REPOSITORY "https://github.com/vsg-dev/osg2vsg.git"
         GIT_TAG "BuildFlexibility"
         GIT_PROGRESS TRUE
@@ -131,7 +128,6 @@ endif()
 OPTION(Build_assimp "Build assimp" OFF)
 if (${Build_assimp})
     FetchContent_Declare(assimp
-        PREFIX ${COMPONENTS_DIR}
         GIT_REPOSITORY "https://github.com/assimp/assimp.git"
         GIT_TAG "master"
         GIT_PROGRESS TRUE
@@ -146,7 +142,6 @@ endif()
 OPTION(Build_vsgXchange "Build vsgXchange" ON)
 if (${Build_vsgXchange})
     FetchContent_Declare(vsgxchange
-        PREFIX ${COMPONENTS_DIR}
         GIT_REPOSITORY https://github.com/vsg-dev/vsgXchange.git
         GIT_TAG BuildFlexibility
         GIT_PROGRESS TRUE
@@ -161,7 +156,6 @@ endif()
 OPTION(Build_vsgImGui "Build vsgImGui" ON)
 if (${Build_vsgImGui})
     FetchContent_Declare(vsgimgui
-        PREFIX ${COMPONENTS_DIR}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgImGui.git"
         GIT_TAG "BuildFlexibility"
         GIT_SUBMODULES "src/imgui"
@@ -178,7 +172,6 @@ endif()
 OPTION(Build_vsgQt "Build vsgQt" OFF)
 if (${Build_vsgQt})
     FetchContent_Declare(vsgqt
-        PREFIX ${COMPONENTS_DIR}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgQt.git"
         GIT_TAG "BuildFlexibility"
         GIT_PROGRESS TRUE
@@ -193,7 +186,6 @@ endif()
 OPTION(Build_vsgExamples "Build vsgExamples" ON)
 if (${Build_vsgExamples})
     FetchContent_Declare(vsgexamples
-        PREFIX ${COMPONENTS_DIR}
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgExamples.git"
         GIT_TAG "BuildFlexibility"
         GIT_PROGRESS TRUE
