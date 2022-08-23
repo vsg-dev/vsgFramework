@@ -130,7 +130,7 @@ OPTION(BUILD_assimp "Build assimp" ON)
 ExternalComponent(assimp "https://github.com/assimp/assimp.git" "master")
 
 # osg2vsg
-OPTION(BUILD_vsgXchange "Build osg2vsg" ON)
+OPTION(BUILD_osg2vsg "Build osg2vsg" ON)
 ExternalComponent(osg2vsg "https://github.com/vsg-dev/osg2vsg.git" "master" ${VulkanSceneGraph} ${assimp} ${OpenSceneGraph})
 
 # vsgXchange
