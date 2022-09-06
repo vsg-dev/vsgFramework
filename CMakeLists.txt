@@ -89,7 +89,7 @@ macro(ExternalComponent component_name in_git_repository in_git_tag)
 
         ExternalProject_Add(${component_name}
             PREFIX ${COMPONENTS_DIR} 
-            CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} 
+            CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} ${${component_name}_CMAKE_OPTIONS}
             GIT_PROGRESS ON
             GIT_REPOSITORY ${${component_name}_repository}
             GIT_TAG ${${component_name}_git_tag}
@@ -116,6 +116,13 @@ OPTION(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 OPTION(BUILD_glslang "Build glslang" ON)
 ExternalComponent(glslang "https://github.com/KhronosGroup/glslang.git" "master")
 
+OPTION(BUILD_SPIRV_headers "Build SPIRV headers" ON)
+ExternalComponent(SPIRV_headers "https://github.com/KhronosGroup/SPIRV-Headers.git" "master")
+
+OPTION(BUILD_SPIRV_tools "Build SPIRV tools" ON)
+set(SPIRV_tools_CMAKE_OPTIONS -DSPIRV-Headers_SOURCE_DIR=${COMPONENTS_DIR})
+ExternalComponent(SPIRV_tools "https://github.com/KhronosGroup/SPIRV-Tools.git" "master" ${SPIRV_headers})
+
 # OpenSceneGraph
 OPTION(BUILD_OpenSceneGraph "Build OpenSceneGraph" OFF)
 set(OpenSceneGraph_CMAKE_OPTIONS -DLIB_POSTFIX=64 -DDYNAMIC_OPENSCENEGRAPH=${BUILD_SHARED_LIBS})
@@ -123,7 +130,7 @@ ExternalComponent(OpenSceneGraph "https://github.com/openscenegraph/OpenSceneGra
 
 # VulkaSceneGraph
 OPTION(BUILD_VulkanSceneGraph "Build VulkanSceneGraph" ON)
-ExternalComponent(VulkanSceneGraph "https://github.com/vsg-dev/VulkanSceneGraph.git" "master" ${glslang})
+ExternalComponent(VulkanSceneGraph "https://github.com/vsg-dev/VulkanSceneGraph.git" "master" ${glslang} ${SPIRV_tools})
 
 # assimp
 OPTION(BUILD_assimp "Build assimp" ON)
