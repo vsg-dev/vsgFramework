@@ -82,8 +82,8 @@ endif()
 #
 # glslang
 #
-OPTION(Build_glslang "Build glslang" OFF)
-if (${Build_glslang})
+OPTION(BUILD_glslang "Build glslang" ON)
+if (${BUILD_glslang})
     FetchContent_Declare(glslang
         GIT_REPOSITORY "https://github.com/KhronosGroup/glslang.git"
         GIT_TAG "master"
@@ -96,8 +96,8 @@ endif()
 #
 # VulkaSceneGraph
 #
-OPTION(Build_VulkanSceneGraph "Build VulkanSceneGraph" ON)
-if (${Build_VulkanSceneGraph})
+OPTION(BUILD_VulkanSceneGraph "Build VulkanSceneGraph" ON)
+if (${BUILD_VulkanSceneGraph})
     FetchContent_Declare(vsg
         GIT_REPOSITORY https://github.com/vsg-dev/VulkanSceneGraph.git
         GIT_TAG BuildFlexibility
@@ -110,8 +110,8 @@ endif()
 #
 # osg2vsg
 #
-OPTION(Build_osg2vsg "Build osg2vsg" ON)
-if (${Build_osg2vsg})
+OPTION(BUILD_osg2vsg "Build osg2vsg" ON)
+if (${BUILD_osg2vsg})
     FetchContent_Declare(osg2vsg
         GIT_REPOSITORY "https://github.com/vsg-dev/osg2vsg.git"
         GIT_TAG "BuildFlexibility"
@@ -125,8 +125,8 @@ endif()
 #
 # assimp
 #
-OPTION(Build_assimp "Build assimp" OFF)
-if (${Build_assimp})
+OPTION(BUILD_assimp "Build assimp" ON)
+if (${BUILD_assimp})
     FetchContent_Declare(assimp
         GIT_REPOSITORY "https://github.com/assimp/assimp.git"
         GIT_TAG "master"
@@ -139,22 +139,24 @@ endif()
 #
 # vsgXchange
 #
-OPTION(Build_vsgXchange "Build vsgXchange" ON)
-if (${Build_vsgXchange})
+OPTION(BUILD_vsgXchange "Build vsgXchange" ON)
+if (${BUILD_vsgXchange})
     FetchContent_Declare(vsgxchange
         GIT_REPOSITORY https://github.com/vsg-dev/vsgXchange.git
         GIT_TAG BuildFlexibility
         GIT_PROGRESS TRUE
 )
+#    FetchContent_MakeAvailable(vsgxchange assimp vsg osg2vsg osg)
     FetchContent_MakeAvailable(vsgxchange)
+
 endif()
 
 ##############################################################################################################
 #
 # vsgImGui
 #
-OPTION(Build_vsgImGui "Build vsgImGui" ON)
-if (${Build_vsgImGui})
+OPTION(BUILD_vsgImGui "Build vsgImGui" ON)
+if (${BUILD_vsgImGui})
     FetchContent_Declare(vsgimgui
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgImGui.git"
         GIT_TAG "BuildFlexibility"
@@ -169,8 +171,8 @@ endif()
 #
 # vsgQt
 #
-OPTION(Build_vsgQt "Build vsgQt" OFF)
-if (${Build_vsgQt})
+OPTION(BUILD_vsgQt "Build vsgQt" ON)
+if (${BUILD_vsgQt})
     FetchContent_Declare(vsgqt
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgQt.git"
         GIT_TAG "BuildFlexibility"
@@ -183,8 +185,8 @@ endif()
 #
 # vsgExamples
 #
-OPTION(Build_vsgExamples "Build vsgExamples" ON)
-if (${Build_vsgExamples})
+OPTION(BUILD_vsgExamples "Build vsgExamples" ON)
+if (${BUILD_vsgExamples})
     FetchContent_Declare(vsgexamples
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgExamples.git"
         GIT_TAG "BuildFlexibility"
