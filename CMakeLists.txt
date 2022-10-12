@@ -127,7 +127,7 @@ OPTION(BUILD_VulkanSceneGraph "Build VulkanSceneGraph" ON)
 if (${BUILD_VulkanSceneGraph})
     FetchContent_Declare(vsg
         GIT_REPOSITORY https://github.com/vsg-dev/VulkanSceneGraph.git
-        GIT_TAG BuildFlexibility
+        GIT_TAG "master"
         GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(vsg)
@@ -141,7 +141,7 @@ OPTION(BUILD_osg2vsg "Build osg2vsg" ON)
 if (${BUILD_osg2vsg})
     FetchContent_Declare(osg2vsg
         GIT_REPOSITORY "https://github.com/vsg-dev/osg2vsg.git"
-        GIT_TAG "BuildFlexibility"
+        GIT_TAG "master"
         GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(osg2vsg)
@@ -170,7 +170,7 @@ OPTION(BUILD_vsgXchange "Build vsgXchange" ON)
 if (${BUILD_vsgXchange})
     FetchContent_Declare(vsgxchange
         GIT_REPOSITORY https://github.com/vsg-dev/vsgXchange.git
-        GIT_TAG BuildFlexibility
+        GIT_TAG master
         GIT_PROGRESS TRUE
 )
 #    FetchContent_MakeAvailable(vsgxchange assimp vsg osg2vsg osg)
@@ -186,7 +186,7 @@ OPTION(BUILD_vsgImGui "Build vsgImGui" ON)
 if (${BUILD_vsgImGui})
     FetchContent_Declare(vsgimgui
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgImGui.git"
-        GIT_TAG "BuildFlexibility"
+        GIT_TAG "master"
         GIT_SUBMODULES "src/imgui"
         GIT_PROGRESS TRUE
     )
@@ -202,7 +202,7 @@ OPTION(BUILD_vsgQt "Build vsgQt" ON)
 if (${BUILD_vsgQt})
     FetchContent_Declare(vsgqt
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgQt.git"
-        GIT_TAG "BuildFlexibility"
+        GIT_TAG "master"
         GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(vsgqt)
@@ -216,7 +216,7 @@ OPTION(BUILD_vsgExamples "Build vsgExamples" ON)
 if (${BUILD_vsgExamples})
     FetchContent_Declare(vsgexamples
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgExamples.git"
-        GIT_TAG "BuildFlexibility"
+        GIT_TAG "master"
         GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(vsgexamples)
