@@ -29,7 +29,7 @@ if(NOT DL_LIBRARY)
 endif()
 
 add_custom_target(clobber
-     COMMAND rm -rf ${COMPONENTS_DIR} CMakeCache.txt CMakeFiles cmake_install.cmake Makefile install_manifest.txt
+     COMMAND rm -rf ${COMPONENTS_DIR} CMakeCache.txt CMakeFiles cmake_install.cmake Makefile install_manifest.txt bin include lib SPIRV* CMakeDoxyfile.in CMakeDoxygenDefaults.cmake compile_commands.json
 )
 
 ##############################################################################################################
@@ -81,7 +81,7 @@ endif()
 #
 # SPIRV-Headers
 #
-OPTION(BUILD_SPIRV_headers "Build SPIRV headers" ON)
+OPTION(BUILD_SPIRV_headers "Build SPIRV headers" OFF)
 if (${BUILD_SPIRV_headers})
     FetchContent_Declare(SPIRV_headers
         GIT_REPOSITORY "https://github.com/KhronosGroup/SPIRV-Headers.git"
@@ -95,7 +95,7 @@ endif()
 #
 # SPIRV-Tools
 #
-OPTION(BUILD_SPIRV_tools "Build SPIRV tools" ON)
+OPTION(BUILD_SPIRV_tools "Build SPIRV tools" OFF)
 if (${BUILD_SPIRV_tools})
     FetchContent_Declare(SPIRV_tools
         GIT_REPOSITORY "https://github.com/KhronosGroup/SPIRV-Tools.git"
