@@ -1,34 +1,36 @@
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.14)
 
 project(vsgFramework)
 
-include(ExternalProject)
+include(FetchContent)
+set(FETCHCONTENT_QUIET FALSE)
 
+set(DOWNLOADS_DIR ${PROJECT_BINARY_DIR}/downloads)
+set(COMPONENTS_DIR ${PROJECT_BINARY_DIR}/components)
+set(FETCHCONTENT_BASE_DIR ${COMPONENTS_DIR})
+
+# set compilation to use C++17
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 # Change the default build type to Release
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
-set(DOWNLOADS_DIR ${PROJECT_BINARY_DIR}/downloads)
-set(COMPONENTS_DIR ${PROJECT_BINARY_DIR})
-set(COMPONENT_INSTALL_PREFIX ${PROJECT_BINARY_DIR} CACHE STRING "Install prefix for components ")
-set(COMPONENT_CMAKE_OPTIONS
-    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-    -DCMAKE_INSTALL_PREFIX=${COMPONENT_INSTALL_PREFIX}
-    -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
-    -DCMAKE_PREFIX_PATH=${COMPONENT_INSTALL_PREFIX}
-)
+#set(CMAKE_PREFIX_PATH ${PROJECT_BINARY_DIR})
 
-install(DIRECTORY ${INSTALL_PREFIX}/bin DESTINATION .)
-install(DIRECTORY ${INSTALL_PREFIX}/lib DESTINATION .)
-install(DIRECTORY ${INSTALL_PREFIX}/include DESTINATION .)
 
-add_custom_target(clean-all)
+find_package(Threads)
+
+find_library(DL_LIBRARY dl)
+if(NOT DL_LIBRARY)
+    set(DL_LIBRARY "") # change from NOTFOUND to empty when passed to linker
+endif()
+
 add_custom_target(clobber
-    COMMAND git -C ${CMAKE_SOURCE_DIR} clean -d -f -x
+     COMMAND rm -rf ${COMPONENTS_DIR} CMakeCache.txt CMakeFiles cmake_install.cmake Makefile install_manifest.txt bin include lib SPIRV* CMakeDoxyfile.in CMakeDoxygenDefaults.cmake compile_commands.json
 )
-
-add_custom_target(clobber-all)
 
 ##############################################################################################################
 #
@@ -44,6 +46,7 @@ if (NOT VULKAN_FOUND)
     set(VulkanSDKVersion "1.2.176.1" CACHE STRING "Vulkan_SDK version to download")
 
     if (NOT EXISTS ${DOWNLOADS_DIR}/${VulkanSDKVersion})
+
         file(MAKE_DIRECTORY downloads)
 
         if (ANDROID)
@@ -60,106 +63,161 @@ if (NOT VULKAN_FOUND)
             execute_process(COMMAND wget --no-cookies -O ${DOWNLOADS_DIR}/vulkansdk-linux-x86_64-${VulkanSDKVersion}.tar.gz https://sdk.lunarg.com/sdk/download/${VulkanSDKVersion}/linux/vulkansdk-linux-x86_64-${VulkanSDKVersion}.tar.gz)
             execute_process(COMMAND tar -zxf ${DOWNLOADS_DIR}/vulkansdk-linux-x86_64-${VulkanSDKVersion}.tar.gz -C ${DOWNLOADS_DIR})
         endif()
+
     endif()
 
     if (EXISTS ${DOWNLOADS_DIR}/${VulkanSDKVersion})
+
         set(VULKAN_SDK ${DOWNLOADS_DIR}/${VulkanSDKVersion}/x86_64)
         set(ENV{VULKAN_SDK} ${VULKAN_SDK})
         set(EXTRA_CMAKE_ARGS_VULKAN_SDK -DVULKAN_SDK=${VULKAN_SDK})
 
         find_package(Vulkan)
+
     endif()
 endif()
 
-# ExternalComponent macro to help set up external projects and their depdendecies
-# Usage:
-#   ExternalComponent(component_name git_repository_url git_tag [optional_component_dependencies...])
-macro(ExternalComponent component_name in_git_repository in_git_tag)
-    # migrate deprecated setting
+##############################################################################################################
+#
+# SPIRV-Headers
+#
+OPTION(BUILD_SPIRV_headers "Build SPIRV headers" OFF)
+if (${BUILD_SPIRV_headers})
+    FetchContent_Declare(SPIRV_headers
+        GIT_REPOSITORY "https://github.com/KhronosGroup/SPIRV-Headers.git"
+        GIT_TAG "master"
+        GIT_PROGRESS TRUE
+    )
+    FetchContent_MakeAvailable(SPIRV_headers)
+endif()
 
-    set(${component_name}_repository ${in_git_repository} CACHE STRING "${component_name} repository" )
-    set(${component_name}_tag ${in_git_tag} CACHE STRING "${component_name} tag" )
+##############################################################################################################
+#
+# SPIRV-Tools
+#
+OPTION(BUILD_SPIRV_tools "Build SPIRV tools" OFF)
+if (${BUILD_SPIRV_tools})
+    FetchContent_Declare(SPIRV_tools
+        GIT_REPOSITORY "https://github.com/KhronosGroup/SPIRV-Tools.git"
+        GIT_TAG "master"
+        GIT_PROGRESS TRUE
+    )
+    FetchContent_MakeAvailable(SPIRV_tools)
+endif()
 
-    if(build_${component_name})
-        set(BUILD_${component_name} ON)
-        unset(build_${component_name})
-    endif()
-    if (BUILD_${component_name})
-        set(${component_name} "${component_name}")
-
-        ExternalProject_Add(${component_name}
-            PREFIX ${COMPONENTS_DIR} 
-            CMAKE_ARGS ${COMPONENT_CMAKE_OPTIONS} ${${component_name}_CMAKE_OPTIONS}
-            GIT_PROGRESS ON
-            GIT_REPOSITORY ${${component_name}_repository}
-            GIT_TAG ${${component_name}_git_tag}
-        )
-        
-        ExternalProject_Add_StepDependencies(${component_name} build "${ARGN}")
-
-        add_custom_target(clean-${component_name}
-            COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/src/${component_name}-build
-                                     --target clean
-        )
-        add_dependencies(clean-all clean-${component_name})
-
-        add_custom_target(clobber-${component_name}
-            COMMAND git -C ${CMAKE_BINARY_DIR}/src/${component_name} clean -d -f -x
-        )
-        add_dependencies(clobber-all clobber-${component_name})
-    endif()
-endmacro()
-
-OPTION(BUILD_SHARED_LIBS "Build shared libraries" OFF)
-
+##############################################################################################################
+#
 # glslang
+#
 OPTION(BUILD_glslang "Build glslang" ON)
-ExternalComponent(glslang "https://github.com/KhronosGroup/glslang.git" "master")
+if (${BUILD_glslang})
+    FetchContent_Declare(glslang
+        GIT_REPOSITORY "https://github.com/KhronosGroup/glslang.git"
+        GIT_TAG "master"
+        GIT_PROGRESS TRUE
+    )
+    FetchContent_MakeAvailable(glslang)
+endif()
 
-OPTION(BUILD_SPIRV_headers "Build SPIRV headers" ON)
-ExternalComponent(SPIRV_headers "https://github.com/KhronosGroup/SPIRV-Headers.git" "master")
-
-OPTION(BUILD_SPIRV_tools "Build SPIRV tools" ON)
-set(SPIRV_tools_CMAKE_OPTIONS -DSPIRV-Headers_SOURCE_DIR=${COMPONENTS_DIR})
-ExternalComponent(SPIRV_tools "https://github.com/KhronosGroup/SPIRV-Tools.git" "master" ${SPIRV_headers})
-
-# OpenSceneGraph
-OPTION(BUILD_OpenSceneGraph "Build OpenSceneGraph" OFF)
-set(OpenSceneGraph_CMAKE_OPTIONS -DLIB_POSTFIX=64 -DDYNAMIC_OPENSCENEGRAPH=${BUILD_SHARED_LIBS})
-ExternalComponent(OpenSceneGraph "https://github.com/openscenegraph/OpenSceneGraph.git" "OpenSceneGraph-3.6")
-
+##############################################################################################################
+#
 # VulkaSceneGraph
+#
 OPTION(BUILD_VulkanSceneGraph "Build VulkanSceneGraph" ON)
-ExternalComponent(VulkanSceneGraph "https://github.com/vsg-dev/VulkanSceneGraph.git" "master" ${glslang} ${SPIRV_tools})
+if (${BUILD_VulkanSceneGraph})
+    FetchContent_Declare(vsg
+        GIT_REPOSITORY https://github.com/vsg-dev/VulkanSceneGraph.git
+        GIT_TAG "master"
+        GIT_PROGRESS TRUE
+    )
+    FetchContent_MakeAvailable(vsg)
+endif()
 
-# assimp
-OPTION(BUILD_assimp "Build assimp" ON)
-ExternalComponent(assimp "https://github.com/assimp/assimp.git" "master")
-
+##############################################################################################################
+#
 # osg2vsg
+#
 OPTION(BUILD_osg2vsg "Build osg2vsg" ON)
-ExternalComponent(osg2vsg "https://github.com/vsg-dev/osg2vsg.git" "master" ${VulkanSceneGraph} ${assimp} ${OpenSceneGraph})
+if (${BUILD_osg2vsg})
+    FetchContent_Declare(osg2vsg
+        GIT_REPOSITORY "https://github.com/vsg-dev/osg2vsg.git"
+        GIT_TAG "master"
+        GIT_PROGRESS TRUE
+    )
+    FetchContent_MakeAvailable(osg2vsg)
+endif()
 
+
+##############################################################################################################
+#
+# assimp
+#
+OPTION(BUILD_assimp "Build assimp" ON)
+if (${BUILD_assimp})
+    FetchContent_Declare(assimp
+        GIT_REPOSITORY "https://github.com/assimp/assimp.git"
+        GIT_TAG "master"
+        GIT_PROGRESS TRUE
+    )
+    FetchContent_MakeAvailable(assimp)
+endif()
+
+##############################################################################################################
+#
 # vsgXchange
+#
 OPTION(BUILD_vsgXchange "Build vsgXchange" ON)
-ExternalComponent(vsgXchange "https://github.com/vsg-dev/vsgXchange.git" "master" ${VulkanSceneGraph} ${assimp} ${OpenSceneGraph} ${osg2vsg} )
+if (${BUILD_vsgXchange})
+    FetchContent_Declare(vsgxchange
+        GIT_REPOSITORY https://github.com/vsg-dev/vsgXchange.git
+        GIT_TAG master
+        GIT_PROGRESS TRUE
+)
+#    FetchContent_MakeAvailable(vsgxchange assimp vsg osg2vsg osg)
+    FetchContent_MakeAvailable(vsgxchange)
 
+endif()
+
+##############################################################################################################
+#
 # vsgImGui
+#
 OPTION(BUILD_vsgImGui "Build vsgImGui" ON)
-ExternalComponent(vsgImGui "https://github.com/vsg-dev/vsgImGui.git" "master" ${VulkanSceneGraph})
+if (${BUILD_vsgImGui})
+    FetchContent_Declare(vsgimgui
+        GIT_REPOSITORY "https://github.com/vsg-dev/vsgImGui.git"
+        GIT_TAG "master"
+        GIT_SUBMODULES "src/imgui"
+        GIT_PROGRESS TRUE
+    )
+    FetchContent_MakeAvailable(vsgimgui)
+endif()
 
-# vsgExamples
-OPTION(BUILD_vsgExamples "Build vsgExamples" ON)
-ExternalComponent(vsgExamples "https://github.com/vsg-dev/vsgExamples.git" "master" ${VulkanSceneGraph} ${assimp} ${osg2vsg} ${vsgXchange} ${vsgImGui})
 
+##############################################################################################################
+#
 # vsgQt
+#
 OPTION(BUILD_vsgQt "Build vsgQt" ON)
-ExternalComponent(vsgQt "https://github.com/vsg-dev/vsgQt.git" "master" ${VulkanSceneGraph} ${vsgXchange})
+if (${BUILD_vsgQt})
+    FetchContent_Declare(vsgqt
+        GIT_REPOSITORY "https://github.com/vsg-dev/vsgQt.git"
+        GIT_TAG "master"
+        GIT_PROGRESS TRUE
+    )
+    FetchContent_MakeAvailable(vsgqt)
+endif()
 
-# vsgUnity
-OPTION(BUILD_vsgUnity "Build vsgUnity" OFF)
-ExternalComponent(vsgUnity "https://github.com/vsg-dev/vsgUnity.git" "master" ${VulkanSceneGraph})
-
-# MyFirstVsgApplication
-OPTION(BUILD_MyFirstVsgApplication "Build MyFirstVsgApplication" OFF)
-ExternalComponent(MyFirstVsgApplication "https://github.com/vsg-dev/MyFirstVsgApplication.git" "master" ${VulkanSceneGraph})
+##############################################################################################################
+#
+# vsgExamples
+#
+OPTION(BUILD_vsgExamples "Build vsgExamples" ON)
+if (${BUILD_vsgExamples})
+    FetchContent_Declare(vsgexamples
+        GIT_REPOSITORY "https://github.com/vsg-dev/vsgExamples.git"
+        GIT_TAG "master"
+        GIT_PROGRESS TRUE
+    )
+    FetchContent_MakeAvailable(vsgexamples)
+endif()
