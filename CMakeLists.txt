@@ -135,9 +135,10 @@ endif()
 
 ##############################################################################################################
 #
-# osg2vsg
+# osg2vsg, only build if OpenSceneGraph is installed
 #
-OPTION(BUILD_osg2vsg "Build osg2vsg" ON)
+find_package(OpenSceneGraph QUIET)
+OPTION(BUILD_osg2vsg "Build osg2vsg" ${OpenSceneGraph_FOUND})
 if (${BUILD_osg2vsg})
     FetchContent_Declare(osg2vsg
         GIT_REPOSITORY "https://github.com/vsg-dev/osg2vsg.git"
@@ -146,7 +147,6 @@ if (${BUILD_osg2vsg})
     )
     FetchContent_MakeAvailable(osg2vsg)
 endif()
-
 
 ##############################################################################################################
 #
