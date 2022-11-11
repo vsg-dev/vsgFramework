@@ -131,8 +131,8 @@ if (${BUILD_VulkanSceneGraph})
         GIT_TAG "master"
         GIT_PROGRESS TRUE
     )
-    FetchContent_MakeAvailable(vsg)
-    set(vsg_DEPENDENCY vsg ${glslang_DEPENDENCY})
+    FetchContent_MakeAvailable(vsg ${glslang_DEPENDENCY})
+    set(vsg_DEPENDENCY vsg)
 endif()
 
 ##############################################################################################################
