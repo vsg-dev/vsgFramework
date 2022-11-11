@@ -117,6 +117,7 @@ if (${BUILD_glslang})
         GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(glslang)
+    set(glslang_DEPENDENCY glslang)
 endif()
 
 ##############################################################################################################
@@ -131,6 +132,7 @@ if (${BUILD_VulkanSceneGraph})
         GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(vsg)
+    set(vsg_DEPENDENCY vsg ${glslang_DEPENDENCY})
 endif()
 
 ##############################################################################################################
@@ -145,7 +147,8 @@ if (${BUILD_osg2vsg})
         GIT_TAG "master"
         GIT_PROGRESS TRUE
     )
-    FetchContent_MakeAvailable(osg2vsg)
+    FetchContent_MakeAvailable(osg2vsg ${vsg_DEPENDENCY})
+    set(osg2vsg_DEPENDENCY osg2vsg)
 endif()
 
 ##############################################################################################################
@@ -156,10 +159,18 @@ OPTION(BUILD_assimp "Build assimp" ON)
 if (${BUILD_assimp})
     FetchContent_Declare(assimp
         GIT_REPOSITORY "https://github.com/assimp/assimp.git"
-        GIT_TAG "master"
+        GIT_TAG "v5.2.5"
         GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(assimp)
+
+    # add definitions to enable assimp locally built lib to be recognized by vsgXchange
+    add_library(assimp::assimp ALIAS assimp)
+    set(assimp_FOUND TRUE CACHE INTERNAL "assimp found.")
+    set(CMAKE_DISABLE_FIND_PACKAGE_assimp TRUE CACHE INTERNAL "Disable find_package(assimp) as it's not necessary.")
+    set(assimp_VERSION "5.2.5") # use the same version as pulled in the GIT_TAG above.
+
+    set(assimp_DEPENDENCY assimp)
 endif()
 
 ##############################################################################################################
@@ -172,10 +183,9 @@ if (${BUILD_vsgXchange})
         GIT_REPOSITORY https://github.com/vsg-dev/vsgXchange.git
         GIT_TAG master
         GIT_PROGRESS TRUE
-)
-#    FetchContent_MakeAvailable(vsgxchange assimp vsg osg2vsg osg)
-    FetchContent_MakeAvailable(vsgxchange)
-
+    )
+    FetchContent_MakeAvailable(vsgxchange ${vsg_DEPENDENCY} ${osg2vsg_DEPENDENCY} ${assimp_DEPENDENCY})
+    set(vsgXchange_DEPENDENCY vsgXchange)
 endif()
 
 ##############################################################################################################
@@ -190,7 +200,7 @@ if (${BUILD_vsgImGui})
         GIT_SUBMODULES "src/imgui"
         GIT_PROGRESS TRUE
     )
-    FetchContent_MakeAvailable(vsgimgui)
+    FetchContent_MakeAvailable(vsgimgui ${vsg_DEPENDENCY} )
 endif()
 
 
@@ -205,7 +215,7 @@ if (${BUILD_vsgQt})
         GIT_TAG "master"
         GIT_PROGRESS TRUE
     )
-    FetchContent_MakeAvailable(vsgqt)
+    FetchContent_MakeAvailable(vsgqt ${vsg_DEPENDENCY} )
 endif()
 
 ##############################################################################################################
@@ -219,5 +229,5 @@ if (${BUILD_vsgExamples})
         GIT_TAG "master"
         GIT_PROGRESS TRUE
     )
-    FetchContent_MakeAvailable(vsgexamples)
+    FetchContent_MakeAvailable(vsgexamples ${vsg_DEPENDENCY} ${vsgXchange_DEPENDENCY} ${vsgImGui_DEPENDENCY})
 endif()
