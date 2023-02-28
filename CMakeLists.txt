@@ -77,48 +77,6 @@ if (NOT VULKAN_FOUND)
     endif()
 endif()
 
-##############################################################################################################
-#
-# SPIRV-Headers
-#
-OPTION(BUILD_SPIRV_headers "Build SPIRV headers" OFF)
-if (${BUILD_SPIRV_headers})
-    FetchContent_Declare(SPIRV_headers
-        GIT_REPOSITORY "https://github.com/KhronosGroup/SPIRV-Headers.git"
-        GIT_TAG "master"
-        GIT_PROGRESS TRUE
-    )
-    FetchContent_MakeAvailable(SPIRV_headers)
-endif()
-
-##############################################################################################################
-#
-# SPIRV-Tools
-#
-OPTION(BUILD_SPIRV_tools "Build SPIRV tools" OFF)
-if (${BUILD_SPIRV_tools})
-    FetchContent_Declare(SPIRV_tools
-        GIT_REPOSITORY "https://github.com/KhronosGroup/SPIRV-Tools.git"
-        GIT_TAG "master"
-        GIT_PROGRESS TRUE
-    )
-    FetchContent_MakeAvailable(SPIRV_tools)
-endif()
-
-##############################################################################################################
-#
-# glslang
-#
-OPTION(BUILD_glslang "Build glslang" ON)
-if (${BUILD_glslang})
-    FetchContent_Declare(glslang
-        GIT_REPOSITORY "https://github.com/KhronosGroup/glslang.git"
-        GIT_TAG "master"
-        GIT_PROGRESS TRUE
-    )
-    FetchContent_MakeAvailable(glslang)
-    set(glslang_DEPENDENCY glslang)
-endif()
 
 ##############################################################################################################
 #
