@@ -77,19 +77,6 @@ if (NOT VULKAN_FOUND)
     endif()
 endif()
 
-##############################################################################################################
-#
-# SPIRV-Headers
-#
-OPTION(BUILD_SPIRV_headers "Build SPIRV headers" OFF)
-if (${BUILD_SPIRV_headers})
-    FetchContent_Declare(SPIRV_headers
-        GIT_REPOSITORY "https://github.com/KhronosGroup/SPIRV-Headers.git"
-        GIT_TAG "master"
-        GIT_PROGRESS TRUE
-    )
-    FetchContent_MakeAvailable(SPIRV_headers)
-endif()
 
 ##############################################################################################################
 #
@@ -99,7 +86,7 @@ OPTION(BUILD_VulkanSceneGraph "Build VulkanSceneGraph" ON)
 if (${BUILD_VulkanSceneGraph})
     FetchContent_Declare(vsg
         GIT_REPOSITORY https://github.com/vsg-dev/VulkanSceneGraph.git
-        GIT_TAG "glslang"
+        GIT_TAG "master"
         GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(vsg ${glslang_DEPENDENCY})
