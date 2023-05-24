@@ -155,7 +155,6 @@ if (${BUILD_vsgImGui})
     FetchContent_Declare(vsgimgui
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgImGui.git"
         GIT_TAG "master"
-        GIT_SUBMODULES "src/imgui"
         GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(vsgimgui ${vsg_DEPENDENCY} )
