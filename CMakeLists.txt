@@ -34,7 +34,7 @@ add_custom_target(clobber
 
 ##############################################################################################################
 #
-# VulkkanSDK
+# VulkanSDK
 #
 if (VULKAN_SDK)
     set(ENV{VULKAN_SDK} ${VULKAN_SDK})
@@ -50,12 +50,12 @@ if (NOT VULKAN_FOUND)
         file(MAKE_DIRECTORY downloads)
 
         if (ANDROID)
-            # TODO : Need to implement Andoid VulkanSDK download and unpack
+            # TODO : Need to implement Android VulkanSDK download and unpack
         elseif (WIN32)
             # TODO : Need to implement Windows VulkanSDK download and unpack
         elseif (APPLE)
             # TODO : Need to implement MacOS VulkanSDK download and unpack
-            # Possible something like:
+            # Possibly something like:
             # execute_process(COMMAND wget --no-cookies -O ../vulkansdk-macos-${{env.VulkanSDKVersion}}.dmg https://sdk.lunarg.com/sdk/download/${{env.VulkanSDKVersion}}/mac/vulkansdk-macos-{{env.VulkanSDKVersion}}.dmg)
             # then mount the dmg in some fashion
         else()
@@ -80,7 +80,7 @@ endif()
 
 ##############################################################################################################
 #
-# VulkaSceneGraph
+# VulkanSceneGraph
 #
 OPTION(BUILD_VulkanSceneGraph "Build VulkanSceneGraph" ON)
 if (${BUILD_VulkanSceneGraph})
@@ -122,7 +122,7 @@ if (${BUILD_assimp})
     )
     FetchContent_MakeAvailable(assimp)
 
-    # add definitions to enable assimp locally built lib to be recognized by vsgXchange
+    # add definitions to enable locally built assimp lib to be recognized by vsgXchange
     add_library(assimp::assimp ALIAS assimp)
     set(assimp_FOUND TRUE CACHE INTERNAL "assimp found.")
     set(CMAKE_DISABLE_FIND_PACKAGE_assimp TRUE CACHE INTERNAL "Disable find_package(assimp) as it's not necessary.")
@@ -155,7 +155,6 @@ if (${BUILD_vsgImGui})
     FetchContent_Declare(vsgimgui
         GIT_REPOSITORY "https://github.com/vsg-dev/vsgImGui.git"
         GIT_TAG "master"
-        GIT_SUBMODULES "src/imgui"
         GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(vsgimgui ${vsg_DEPENDENCY} )
