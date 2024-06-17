@@ -9,13 +9,13 @@ You can toggle on/off the use of external projects via ccmake/CMakeSetup.
 
 To checkout:
 
+~~~ sh
     git clone https://github.com/vsg-dev/vsgFramework.git
+~~~
 
 To build:
 
+~~~ sh
     cmake .
-    make -j 8
-
-To install headers, libraries and excutables in system or user defined location:
-
-    sudo make install
+    cmake --build . -j 16 -t install
+~~~~

@@ -79,15 +79,6 @@ endif()
 
 ##############################################################################################################
 #
-# SPIRV-Tools
-#
-OPTION(BUILD_SPIRV_tools "Build SPIRV tools" OFF)
-if (${BUILD_SPIRV_tools})
-
-endif()
-
-##############################################################################################################
-#
 # glslang
 #
 OPTION(BUILD_glslang "Build glslang" ON)
@@ -95,8 +86,8 @@ if (${BUILD_glslang})
 
     set(GLSLANG_MIN_VERSION "14" CACHE STRING "glslang 14 is the earliest version that we think installs itself properly on all platforms. Other platforms may be able to use an earlier version")
 
-    find_package(SPIRV-Tools-opt QUIET)
-    if (NOT SPIRV_tools_FOUND)
+    find_package(SPIRV-Tools QUIET)
+    if (NOT SPIRV-Tools_FOUND)
         FetchContent_Declare(SPIRV_headers
             GIT_REPOSITORY "https://github.com/KhronosGroup/SPIRV-Headers"
             GIT_TAG "main"
@@ -115,8 +106,8 @@ if (${BUILD_glslang})
     endif()
 
     find_package(glslang ${GLSLANG_MIN_VERSION} CONFIG QUIET)
-
     if (NOT glslang_FOUND)
+        set(ALLOW_EXTERNAL_SPIRV_TOOLS ON)
         FetchContent_Declare(glslang
             GIT_REPOSITORY "https://github.com/KhronosGroup/glslang.git"
             GIT_TAG "main"
