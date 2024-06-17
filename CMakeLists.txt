@@ -77,6 +77,56 @@ if (NOT VULKAN_FOUND)
     endif()
 endif()
 
+##############################################################################################################
+#
+# SPIRV-Tools
+#
+OPTION(BUILD_SPIRV_tools "Build SPIRV tools" OFF)
+if (${BUILD_SPIRV_tools})
+
+endif()
+
+##############################################################################################################
+#
+# glslang
+#
+OPTION(BUILD_glslang "Build glslang" ON)
+if (${BUILD_glslang})
+
+    set(GLSLANG_MIN_VERSION "14" CACHE STRING "glslang 14 is the earliest version that we think installs itself properly on all platforms. Other platforms may be able to use an earlier version")
+
+    find_package(SPIRV-Tools-opt QUIET)
+    if (NOT SPIRV_tools_FOUND)
+        FetchContent_Declare(SPIRV_headers
+            GIT_REPOSITORY "https://github.com/KhronosGroup/SPIRV-Headers"
+            GIT_TAG "main"
+            GIT_PROGRESS TRUE
+        )
+        FetchContent_MakeAvailable(SPIRV_headers)
+        set(SPIRV_headers_DEPENDENCY SPIRV_headers)
+
+        FetchContent_Declare(SPIRV_tools
+            GIT_REPOSITORY "https://github.com/KhronosGroup/SPIRV-Tools.git"
+            GIT_TAG "main"
+            GIT_PROGRESS TRUE
+        )
+        FetchContent_MakeAvailable(SPIRV_tools ${SPIRV_headers_DEPENDENCY})
+        set(SPIRV_tools_DEPENDENCY SPIRV_tools)
+    endif()
+
+    find_package(glslang ${GLSLANG_MIN_VERSION} CONFIG QUIET)
+
+    if (NOT glslang_FOUND)
+        FetchContent_Declare(glslang
+            GIT_REPOSITORY "https://github.com/KhronosGroup/glslang.git"
+            GIT_TAG "main"
+            GIT_PROGRESS TRUE
+        )
+        FetchContent_MakeAvailable(glslang ${SPIRV_tools_DEPENDENCY})
+        set(glslang_DEPENDENCY glslang)
+    endif()
+endif()
+
 
 ##############################################################################################################
 #
