@@ -156,9 +156,12 @@ endif()
 #
 OPTION(BUILD_assimp "Build assimp" ON)
 if (${BUILD_assimp})
+
+    set(assimp_VERSION "5.4.3")
+
     FetchContent_Declare(assimp
         GIT_REPOSITORY "https://github.com/assimp/assimp.git"
-        GIT_TAG "v5.2.5"
+        GIT_TAG "v${assimp_VERSION}"
         GIT_PROGRESS TRUE
     )
     FetchContent_MakeAvailable(assimp)
@@ -167,7 +170,6 @@ if (${BUILD_assimp})
     add_library(assimp::assimp ALIAS assimp)
     set(assimp_FOUND TRUE CACHE INTERNAL "assimp found.")
     set(CMAKE_DISABLE_FIND_PACKAGE_assimp TRUE CACHE INTERNAL "Disable find_package(assimp) as it's not necessary.")
-    set(assimp_VERSION "5.2.5") # use the same version as pulled in the GIT_TAG above.
 
     set(assimp_DEPENDENCY assimp)
 endif()
